@@ -8,6 +8,9 @@ import {
   IsEmail,
   IsOptional,
   IsBoolean,
+  MinLength,
+  MaxLength,
+  Matches,
 } from 'class-validator';
 
 export class AccountLoginDto {
@@ -19,6 +22,12 @@ export class AccountLoginDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
+  @MinLength(8)
+  @MaxLength(20)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message:
+      'password must contain uppercase letters and numbers or special characters',
+  })
   password: string;
 }
 
@@ -45,7 +54,7 @@ export class RefreshTokenDto {
   @IsString()
   userId: string;
 
-  @IsNotEmpty({ message: 'Invalid token' })
-  @IsString({ message: 'Invalid token' })
+  @IsNotEmpty({ message: 'invalid token' })
+  @IsString({ message: 'invalid token' })
   access_token: string;
 }
