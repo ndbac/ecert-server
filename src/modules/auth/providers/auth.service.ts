@@ -1,6 +1,10 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { AccountRepository } from '../auth.repository';
-import { AccountLoginDto, CreateAccountDto, RefreshTokenDto } from '../dto/auth.dto';
+import {
+  AccountLoginDto,
+  CreateAccountDto,
+  RefreshTokenDto,
+} from '../dto/auth.dto';
 import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
 
@@ -10,7 +14,7 @@ export class AccountService {
     private readonly accountRepo: AccountRepository,
     private readonly hashingService: HashingService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async register(data: CreateAccountDto) {
     const account = {
@@ -45,7 +49,7 @@ export class AccountService {
     }
     await this.accountRepo.updateById(account._id, { access_token: null });
     return {
-      status: "successfully"
-    }
+      status: 'successfully',
+    };
   }
 }

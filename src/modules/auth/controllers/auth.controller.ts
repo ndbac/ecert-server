@@ -15,7 +15,11 @@ import {
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
 import { AccountService } from '../providers/auth.service';
-import { CreateAccountDto, AccountLoginDto, RefreshTokenDto } from '../dto/auth.dto';
+import {
+  CreateAccountDto,
+  AccountLoginDto,
+  RefreshTokenDto,
+} from '../dto/auth.dto';
 import {
   AccountResponseDto,
   AccountLoginResponseDto,
@@ -73,9 +77,7 @@ export class AccountController {
   @ApiBody({ type: RefreshTokenDto })
   @SecurityDecorator()
   @Put('/logout')
-  async logoutAccount(
-    @ExtractAuthInput() data: RefreshTokenDto,
-  ) {
+  async logoutAccount(@ExtractAuthInput() data: RefreshTokenDto) {
     return await this.accountService.refreshToken(data);
   }
 }

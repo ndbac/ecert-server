@@ -14,8 +14,8 @@ import { isObjectId } from './helpers';
 export class BaseRepository<T extends Document> {
   protected primaryKey = '_id';
 
-  constructor(public readonly model: Model<T>) { }
-  
+  constructor(public readonly model: Model<T>) {}
+
   async create(doc: Record<string, unknown>, options?: SaveOptions): Promise<T>;
   async create(
     docs: Record<string, unknown>[],
