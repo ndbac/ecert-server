@@ -5,15 +5,15 @@ import { AccountDocument } from './accounts.model';
 import { AccountRepository } from './accounts.repository';
 
 @Module({
-    imports: [
-        MongooseModule.forFeature([
-            {
-                name: CollectionName.ACCOUNTS,
-                schema: AccountDocument.schema,
-            },
-        ]),
-    ],
-    providers: [AccountRepository],
-    exports: [AccountRepository],
+  imports: [
+    MongooseModule.forFeature([
+      {
+        name: CollectionName.ACCOUNTS,
+        schema: AccountDocument.schema,
+      },
+    ]),
+  ],
+  providers: [AccountRepository],
+  exports: [AccountRepository],
 })
-export class AccountCoreModule { }
+export class AccountCoreModule {}

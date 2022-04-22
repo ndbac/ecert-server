@@ -11,7 +11,7 @@ export class DBRootModule {
         uri: process.env.MONGODB_URI,
         useNewUrlParser: true,
         useUnifiedTopology: true,
-      })
+      }),
     });
   }
 }

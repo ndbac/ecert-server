@@ -45,7 +45,7 @@ export class BaseRepository<T extends Document> {
     options?: QueryOptions,
     projection: any = null,
   ): Promise<T | null> {
-    let query = this.model.findOne(conditions, projection, options);
+    const query = this.model.findOne(conditions, projection, options);
     return query.exec();
   }
 

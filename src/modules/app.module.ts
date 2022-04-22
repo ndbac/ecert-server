@@ -6,12 +6,12 @@ import { AccountModule } from './accounts/accounts.module';
 import { CommonModule } from './common/common.module';
 
 @Module({
-    imports: [
-        ConfigModule.forRoot(),
-        DBRootModule.forMongo(),
-        HealthModule,
-        AccountModule,
-        CommonModule,
-    ],
+  imports: [
+    ConfigModule.forRoot(),
+    DBRootModule.forMongo(),
+    HealthModule,
+    AccountModule,
+    CommonModule,
+  ],
 })
-export class AppModule { }
+export class AppModule {}

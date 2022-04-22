@@ -5,11 +5,8 @@ import { AccountService } from './providers/account.service';
 import { CommonModule } from '../common/common.module';
 
 @Module({
-    imports: [
-        AccountCoreModule,
-        CommonModule,
-    ],
-    providers: [AccountService],
-    controllers: [AccountController],
+  imports: [AccountCoreModule, CommonModule],
+  providers: [AccountService],
+  controllers: [AccountController],
 })
-export class AccountModule { }
+export class AccountModule {}
