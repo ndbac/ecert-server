@@ -10,7 +10,7 @@ export class AccountService {
     private readonly accountRepo: AccountRepository,
     private readonly hashingService: HashingService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async register(data: CreateAccountDto) {
     const account = {
@@ -30,7 +30,8 @@ export class AccountService {
         namespace: account.namespace,
       };
       return {
-        token: this.jwtService.generateToken(data),
+        access_token: this.jwtService.generateToken(data),
+        expires_in: process.env.TOKEN_EXPIRE_TIME,
       };
     }
   }

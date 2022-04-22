@@ -13,7 +13,6 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
-import { AuthDecorator } from 'src/decorators/swagger-auth';
 import { AccountService } from '../providers/auth.service';
 import { CreateAccountDto, AccountLoginDto } from '../dto/auth.dto';
 import {
@@ -24,7 +23,6 @@ import {
 @Controller('account/auth')
 @ApiTags('account.auth')
 @UsePipes(ValidationPipe)
-@AuthDecorator()
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 

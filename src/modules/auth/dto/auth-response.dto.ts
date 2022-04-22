@@ -8,5 +8,10 @@ export class AccountLoginResponseDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
-  token: string;
+  access_token: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  expires_in: string;
 }
