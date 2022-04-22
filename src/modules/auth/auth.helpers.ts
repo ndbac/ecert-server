@@ -1,5 +1,4 @@
 import { Request } from 'express';
-import { IAuthorizedRequest } from './auth.types';
 
 export const getTokenFromAuthorizationHeader = (req: Request) => {
   const authHeader =
