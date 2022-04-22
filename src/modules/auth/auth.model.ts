@@ -1,6 +1,6 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { BaseDocument } from 'src/shared/mongoose/base.document';
-import { EAccountType } from 'src/shared/types';
+import { IamNamespace } from 'src/shared/types';
 import { DefaultSchemaOptions } from 'src/shared/mongoose/schema-option';
 
 @Schema(DefaultSchemaOptions)
@@ -20,6 +20,6 @@ export class AccountDocument extends BaseDocument {
   @Prop({ default: true, required: true })
   active: boolean;
 
-  @Prop({ default: EAccountType.USER, required: true })
-  type: EAccountType;
+  @Prop({ default: IamNamespace.USER, required: true })
+  namespace: IamNamespace;
 }

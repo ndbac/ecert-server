@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CollectionName } from 'src/shared/types';
-import { AccountDocument } from './accounts.model';
-import { AccountRepository } from './accounts.repository';
+import { AccountDocument } from './auth.model';
+import { AccountRepository } from './auth.repository';
 
 @Module({
   imports: [

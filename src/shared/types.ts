@@ -2,7 +2,7 @@ export enum CollectionName {
   ACCOUNTS = 'accounts',
 }
 
-export enum EAccountType {
+export enum IamNamespace {
   ADMIN = 'admin',
   WRITER = 'writer',
   USER = 'user',

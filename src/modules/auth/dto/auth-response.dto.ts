@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger/dist/decorators';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { CreateAccountDto } from './account.dto';
+import { CreateAccountDto } from './auth.dto';
 
 export class AccountResponseDto extends CreateAccountDto {}
 

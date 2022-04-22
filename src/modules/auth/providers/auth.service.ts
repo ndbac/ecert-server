@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { AccountRepository } from '../accounts.repository';
-import { AccountLoginDto, CreateAccountDto } from '../dto/account.dto';
+import { AccountRepository } from '../auth.repository';
+import { AccountLoginDto, CreateAccountDto } from '../dto/auth.dto';
 import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
 
@@ -25,9 +25,9 @@ export class AccountService {
     const account = await this.accountRepo.findOneOrFail({ email: data.email });
     if (await this.hashingService.compare(data.password, account.password)) {
       const data = {
-        id: account._id,
+        userId: account._id,
         email: account.email,
-        type: account.type,
+        namespace: account.namespace,
       };
       return {
         token: this.jwtService.generateToken(data),

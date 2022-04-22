@@ -1,7 +1,7 @@
 import { IamNamespace } from 'src/shared/types';
 
-export interface IJwtDataInput {
-  userId: string;
-  email: string;
+export interface IIamUserData {
   namespace: IamNamespace;
+  userId: string;
+  identifier: string;
 }

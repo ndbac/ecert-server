@@ -14,12 +14,12 @@ import {
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
 import { AuthDecorator } from 'src/decorators/swagger-auth';
-import { AccountService } from '../providers/account.service';
-import { CreateAccountDto, AccountLoginDto } from '../dto/account.dto';
+import { AccountService } from '../providers/auth.service';
+import { CreateAccountDto, AccountLoginDto } from '../dto/auth.dto';
 import {
   AccountResponseDto,
   AccountLoginResponseDto,
-} from '../dto/account-response.dto';
+} from '../dto/auth-response.dto';
 
 @Controller('account/auth')
 @ApiTags('account.auth')
