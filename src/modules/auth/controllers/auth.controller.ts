@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Post,
+  Put,
   HttpCode,
   HttpStatus,
   UsePipes,
@@ -14,14 +15,16 @@ import {
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
 import { AccountService } from '../providers/auth.service';
-import { CreateAccountDto, AccountLoginDto } from '../dto/auth.dto';
+import { CreateAccountDto, AccountLoginDto, RefreshTokenDto } from '../dto/auth.dto';
 import {
   AccountResponseDto,
   AccountLoginResponseDto,
 } from '../dto/auth-response.dto';
+import { SecurityDecorator } from 'src/decorators/security-input.decorator';
+import { ExtractAuthInput } from 'src/decorators/auth-input.decorator';
 
-@Controller('account/auth')
-@ApiTags('account.auth')
+@Controller('auth')
+@ApiTags('auth')
 @UsePipes(ValidationPipe)
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
@@ -49,12 +52,30 @@ export class AccountController {
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
-    description: 'Account created',
+    description: 'Account logged',
     type: AccountLoginResponseDto,
   })
   @ApiBody({ type: AccountLoginDto })
-  @Post('/login')
+  @Put('/login')
   async loginAccount(@Body() data: AccountLoginDto) {
     return await this.accountService.login(data);
+  }
+
+  @ApiOperation({
+    operationId: 'refreshToken',
+    summary: 'refresh access token',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Token refreshed',
+  })
+  @ApiBody({ type: RefreshTokenDto })
+  @SecurityDecorator()
+  @Put('/logout')
+  async logoutAccount(
+    @ExtractAuthInput() data: RefreshTokenDto,
+  ) {
+    return await this.accountService.refreshToken(data);
   }
 }

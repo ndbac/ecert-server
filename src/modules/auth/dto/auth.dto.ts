@@ -38,3 +38,14 @@ export class CreateAccountDto extends AccountLoginDto {
   @IsBoolean()
   active: boolean;
 }
+
+export class RefreshTokenDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+
+  @IsNotEmpty({ message: 'Invalid token' })
+  @IsString({ message: 'Invalid token' })
+  access_token: string;
+}

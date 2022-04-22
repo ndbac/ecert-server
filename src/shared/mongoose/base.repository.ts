@@ -5,13 +5,17 @@ import {
   SaveOptions,
   FilterQuery,
   QueryOptions,
+  UpdateQuery,
+  UpdateWithAggregationPipeline,
 } from 'mongoose';
 import { merge } from 'lodash';
 import { isObjectId } from './helpers';
 
 export class BaseRepository<T extends Document> {
-  constructor(public readonly model: Model<T>) {}
+  protected primaryKey = '_id';
 
+  constructor(public readonly model: Model<T>) { }
+  
   async create(doc: Record<string, unknown>, options?: SaveOptions): Promise<T>;
   async create(
     docs: Record<string, unknown>[],
@@ -106,6 +110,55 @@ export class BaseRepository<T extends Document> {
     if (!(await this.isCollectionExists())) {
       await this.model.createCollection();
     }
+  }
+
+  async update(
+    conditions: FilterQuery<T>,
+    doc: UpdateWithAggregationPipeline | UpdateQuery<T>,
+    options?: QueryOptions | null,
+  ): Promise<number> {
+    const result = await this.model.updateOne(conditions, doc, options).exec();
+
+    return result.ok ? result.nModified : 0;
+  }
+
+  async updateById(
+    id: any,
+    doc: UpdateWithAggregationPipeline | UpdateQuery<T>,
+    options?: QueryOptions & { rawResult: boolean },
+  ): Promise<T | null> {
+    return this.updateOne({ _id: id }, doc, options);
+  }
+
+  async updateMany(
+    conditions: FilterQuery<T>,
+    doc: UpdateWithAggregationPipeline | UpdateQuery<T>,
+    options?: QueryOptions,
+  ): Promise<number> {
+    const result = await this.model.updateMany(conditions, doc, options).exec();
+    return result.ok ? result.nModified : 0;
+  }
+
+  async updateOne(
+    conditions: FilterQuery<T>,
+    doc: UpdateQuery<T> | UpdateWithAggregationPipeline,
+    options?: QueryOptions & { rawResult: boolean },
+  ): Promise<T | null> {
+    return this.model
+      .findOneAndUpdate(conditions, doc, merge({ new: true }, options))
+      .exec();
+  }
+
+  async updateOneOrCreate(
+    conditions: FilterQuery<T>,
+    doc: UpdateWithAggregationPipeline | UpdateQuery<T>,
+    options?: QueryOptions & { rawResult: boolean },
+  ): Promise<T | null> {
+    return this.updateOne(
+      conditions,
+      doc,
+      merge({ new: true, upsert: true, setDefaultsOnInsert: true }, options),
+    );
   }
 
   throwErrorNotFound(): never {

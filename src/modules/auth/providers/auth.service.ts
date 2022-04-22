@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { AccountRepository } from '../auth.repository';
-import { AccountLoginDto, CreateAccountDto } from '../dto/auth.dto';
+import { AccountLoginDto, CreateAccountDto, RefreshTokenDto } from '../dto/auth.dto';
 import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
 
@@ -29,10 +29,23 @@ export class AccountService {
         email: account.email,
         namespace: account.namespace,
       };
+      const access_token = this.jwtService.generateToken(data);
+      await this.accountRepo.updateById(account._id, { access_token });
       return {
-        access_token: this.jwtService.generateToken(data),
+        access_token,
         expires_in: process.env.TOKEN_EXPIRE_TIME,
       };
+    }
+  }
+
+  async refreshToken(data: RefreshTokenDto) {
+    const account = await this.accountRepo.findOneOrFail({ _id: data.userId });
+    if (account.access_token !== data.access_token) {
+      throw new ForbiddenException('Invalid access token');
+    }
+    await this.accountRepo.updateById(account._id, { access_token: null });
+    return {
+      status: "successfully"
     }
   }
 }

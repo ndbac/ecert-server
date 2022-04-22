@@ -17,6 +17,9 @@ export class AccountDocument extends BaseDocument {
   @Prop({ required: true })
   password: string;
 
+  @Prop({ default: null, nullable: true })
+  access_token: string;
+
   @Prop({ default: true, required: true })
   active: boolean;
 
