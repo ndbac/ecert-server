@@ -1,21 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { AccountRepository } from '../accounts.repository';
-import { CreateAccountDto } from '../dto/create-account.dto';
-import { EncryptionService } from '../../common/hashing/hashing.service';
+import { AccountLoginDto, CreateAccountDto } from '../dto/account.dto';
+import { HashingService } from '../../common/hashing/hashing.service';
 
 @Injectable()
 export class AccountService {
-    constructor(private readonly accountRepo: AccountRepository, private readonly encryptionService: EncryptionService) { }
+    constructor(private readonly accountRepo: AccountRepository, private readonly hashingService: HashingService) { }
 
-    async createAccount(data: CreateAccountDto) {
+    async register(data: CreateAccountDto) {
         const account = {
-            email: data.email,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            password: this.encryptionService.encrypt(data.password),
+            ...data,
+            password: await this.hashingService.hash(data.password),
             active: data.active || true,
-            type: data.type
         }
         return await this.accountRepo.create(account);
+    }
+
+    async login(data: AccountLoginDto) {
+        const account = await this.accountRepo.findOneOrFail({ email: data.email });
+        if (await this.hashingService.compare(data.password, account.password)) {
+            return {
+                STATUS: "OK"
+            }
+        }
     }
 }

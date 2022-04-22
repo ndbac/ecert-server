@@ -7,8 +7,7 @@ import {
 } from '@nestjs/swagger/dist/decorators';
 import { AuthDecorator } from 'src/decorators/swagger-auth';
 import { AccountService } from '../providers/account.service';
-import { CreateAccountDto } from '../dto/create-account.dto';
-import { AccountResponseDto } from '../dto/account-response.dto';
+import { CreateAccountDto, AccountResponseDto, AccountLoginDto } from '../dto/account.dto';
 
 @Controller('account/auth')
 @ApiTags('account.auth')
@@ -28,8 +27,24 @@ export class AccountController {
         type: AccountResponseDto,
     })
     @ApiBody({ type: CreateAccountDto })
-    @Post()
-    async create(@Body() data: CreateAccountDto) {
-        return await this.accountService.createAccount(data);
+    @Post('/register')
+    async createAccount(@Body() data: CreateAccountDto) {
+        return await this.accountService.register(data);
+    }
+
+    @ApiOperation({
+        operationId: 'loginAccount',
+        summary: 'login a account'
+    })
+    @HttpCode(HttpStatus.ACCEPTED)
+    @ApiResponse({
+        status: HttpStatus.ACCEPTED,
+        description: 'Account created',
+        type: AccountLoginDto,
+    })
+    @ApiBody({ type: AccountLoginDto })
+    @Post('/login')
+    async loginAccount(@Body() data: AccountLoginDto) {
+        return await this.accountService.login(data);
     }
 }

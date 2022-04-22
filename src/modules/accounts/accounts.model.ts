@@ -20,6 +20,6 @@ export class AccountDocument extends BaseDocument {
     @Prop({ default: true, required: true })
     active: boolean;
 
-    @Prop({ required: true })
+    @Prop({ default: EAccountType.USER, required: true })
     type: EAccountType;
 }

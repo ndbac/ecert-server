@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { HashingService } from './hashing.provider';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
-export class EncryptionService {
-  constructor(private readonly hashingService: HashingService) {}
-
-  encrypt(rawText: string) {
-    return this.hashingService.encrypt(rawText);
+export class HashingService {
+  async hash(rawText: string) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedText = await bcrypt.hash(rawText, salt);
+    return hashedText;
   }
 
-  decrypt(encryptedText: string) {
-    return this.hashingService.decrypt(encryptedText);
+  async compare(rawText: string, hashedText: string) {
+    return await bcrypt.compare(rawText, hashedText);
   }
 }
