@@ -1,6 +1,7 @@
 import {
   Controller,
   Put,
+  Body,
   HttpCode,
   HttpStatus,
   UsePipes,
@@ -13,7 +14,10 @@ import {
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
 import { VerifyService } from '../providers/verify.service';
-import { VerifyAccountInputDto } from '../dto/verify.dto';
+import {
+  VerifyAccountInputDto,
+  PasswordResetInputDto,
+} from '../dto/verify.dto';
 import { SecurityDecorator } from 'src/decorators/security-input.decorator';
 import { ExtractAuthInput } from 'src/decorators/auth-input.decorator';
 
@@ -39,5 +43,20 @@ export class VerifyController {
     @ExtractAuthInput() data: VerifyAccountInputDto,
   ) {
     return await this.verifyService.createVerifycationToken(data);
+  }
+
+  @ApiOperation({
+    operationId: 'createResetPasswordToken',
+    summary: 'create reset password token',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Reset password token created',
+  })
+  @ApiBody({ type: PasswordResetInputDto })
+  @Put('/createResetPasswordToken')
+  async createResetPasswordToken(@Body() data: PasswordResetInputDto) {
+    return await this.verifyService.createResetPasswordToken(data);
   }
 }

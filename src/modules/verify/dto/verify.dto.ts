@@ -11,3 +11,10 @@ export class VerifyAccountInputDto {
   @IsString({ message: 'invalid token' })
   access_token: string;
 }
+
+export class PasswordResetInputDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+}

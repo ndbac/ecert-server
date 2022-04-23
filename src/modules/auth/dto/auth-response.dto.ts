@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger/dist/decorators';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsDate } from 'class-validator';
 import { CreateAccountDto } from './auth.dto';
 
 export class AccountResponseDto extends CreateAccountDto {}
@@ -10,8 +10,8 @@ export class AccountLoginResponseDto {
   @IsString()
   access_token: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: Date })
   @IsNotEmpty()
-  @IsString()
-  expires_in: string;
+  @IsDate()
+  expires_in: Date;
 }

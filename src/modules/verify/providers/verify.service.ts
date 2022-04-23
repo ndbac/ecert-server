@@ -1,8 +1,10 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
-import _ from 'lodash';
 import { VerifyRepository } from '../verify.repository';
 import { CryptoService } from '../../common/crypto/crypto.service';
-import { VerifyAccountInputDto } from '../dto/verify.dto';
+import {
+  VerifyAccountInputDto,
+  PasswordResetInputDto,
+} from '../dto/verify.dto';
 import { AuthRepository } from 'src/modules/auth/auth.repository';
 
 @Injectable()
@@ -26,8 +28,9 @@ export class VerifyService {
     const encryptedToken = await this.cryptoService.encryptText(rawToken);
     const verifyToken = {
       verificationToken: encryptedToken,
-      verificationTokenExpires:
-        Date.now() + process.env.VERIFY_TOKEN_EXPIRE_TIME,
+      verificationTokenExpires: new Date(
+        Date.now() + parseInt(process.env.VERIFY_TOKEN_EXPIRE_TIME),
+      ),
     };
     const isExist = await this.verifyRepo.findOne({ userId: input.userId });
     if (isExist) {
@@ -37,5 +40,22 @@ export class VerifyService {
       ...verifyToken,
       userId: input.userId,
     });
+  }
+
+  async createResetPasswordToken(input: PasswordResetInputDto) {
+    const account = await this.authRepo.findOneOrFail({ email: input.email });
+    const rawToken = await this.cryptoService.generateRandomBytes(32);
+    const encryptedToken = await this.cryptoService.encryptText(rawToken);
+    const passwordResetToken = {
+      passwordResetToken: encryptedToken,
+      passwordResetExpires: new Date(
+        Date.now() + parseInt(process.env.VERIFY_TOKEN_EXPIRE_TIME),
+      ),
+    };
+    await this.verifyRepo.findOneOrFail({ userId: account._id });
+    return await this.verifyRepo.updateOne(
+      { userId: account._id },
+      passwordResetToken,
+    );
   }
 }

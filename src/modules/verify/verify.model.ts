@@ -17,5 +17,5 @@ export class VerifyDocument extends BaseDocument {
   verificationToken: string;
 
   @Prop({ default: null, nullable: true })
-  verificationTokenExpires: string;
+  verificationTokenExpires: Date;
 }

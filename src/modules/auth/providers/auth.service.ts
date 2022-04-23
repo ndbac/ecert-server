@@ -8,6 +8,7 @@ import {
 import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { getTime } from 'date-fns';
 
 @Injectable()
 export class AuthService {
@@ -44,7 +45,9 @@ export class AuthService {
       });
       return {
         access_token,
-        expires_in: process.env.TOKEN_EXPIRE_TIME,
+        expires_in: new Date(
+          Date.now() + parseInt(process.env.TOKEN_EXPIRE_TIME),
+        ),
       };
     }
     throw new ForbiddenException('invalid password');
