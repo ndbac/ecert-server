@@ -14,6 +14,8 @@ import { NotificationService } from 'src/modules/notification/providers/notifica
 import {
   ResetPasswordSubject,
   ResetPasswordText,
+  AccountVerificationSubject,
+  AccountVerificationText,
 } from 'src/shared/email/sample-email';
 import { EEmailOption } from '../../util/types';
 import { ENotificationType } from '../../notification/types';
@@ -49,14 +51,27 @@ export class VerifyService {
         Date.now() + parseInt(process.env.VERIFY_TOKEN_EXPIRE_TIME),
       ),
     };
+    const emailData = {
+      from: process.env.EMAIL_SENDER_DEFAULT,
+      to: account.email,
+      subject: AccountVerificationSubject,
+      text: `${AccountVerificationText}: ${rawToken}`,
+      option: EEmailOption.TEXT,
+      type: ENotificationType.VERIFICATION_ACCOUNT,
+    };
+    await this.notiService.sendEmail(emailData, account._id);
     const isExist = await this.verifyRepo.findOne({ userId: input.userId });
     if (isExist) {
-      return await this.verifyRepo.updateById(isExist._id, verifyToken);
+      await this.verifyRepo.updateById(isExist._id, verifyToken);
+    } else {
+      await this.verifyRepo.create({
+        ...verifyToken,
+        userId: input.userId,
+      });
     }
-    return await this.verifyRepo.create({
-      ...verifyToken,
-      userId: input.userId,
-    });
+    return {
+      status: 'successfully',
+    };
   }
 
   async createResetPasswordToken(input: PasswordResetInputDto) {

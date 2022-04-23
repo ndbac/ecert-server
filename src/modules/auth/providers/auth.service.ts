@@ -44,6 +44,7 @@ export class AuthService {
         access_token: encryptedAccessToken,
       });
       return {
+        id: account._id,
         access_token,
         expires_in: new Date(
           Date.now() + parseInt(process.env.TOKEN_EXPIRE_TIME),
