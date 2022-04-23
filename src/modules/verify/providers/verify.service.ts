@@ -1,4 +1,8 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { VerifyRepository } from '../verify.repository';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import {
@@ -6,6 +10,13 @@ import {
   PasswordResetInputDto,
 } from '../dto/verify.dto';
 import { AuthRepository } from 'src/modules/auth/auth.repository';
+import { NotificationService } from 'src/modules/notification/providers/notification.service';
+import {
+  ResetPasswordSubject,
+  ResetPasswordText,
+} from 'src/shared/email/sample-email';
+import { EEmailOption } from '../../util/types';
+import { ENotificationType } from '../../notification/types';
 
 @Injectable()
 export class VerifyService {
@@ -13,10 +24,16 @@ export class VerifyService {
     private readonly verifyRepo: VerifyRepository,
     private readonly cryptoService: CryptoService,
     private readonly authRepo: AuthRepository,
+    private readonly notiService: NotificationService,
   ) {}
 
   async createVerifycationToken(input: VerifyAccountInputDto) {
     const account = await this.authRepo.findOneOrFail({ _id: input.userId });
+    if (account.verify) {
+      throw new BadRequestException(
+        `user id: ${account._id} has already verified`,
+      );
+    }
     const checkToken = await this.cryptoService.compare(
       input.access_token,
       account.access_token || '',
@@ -52,10 +69,30 @@ export class VerifyService {
         Date.now() + parseInt(process.env.VERIFY_TOKEN_EXPIRE_TIME),
       ),
     };
-    await this.verifyRepo.findOneOrFail({ userId: account._id });
-    return await this.verifyRepo.updateOne(
-      { userId: account._id },
-      passwordResetToken,
-    );
+    const emailData = {
+      from: process.env.EMAIL_SENDER_DEFAULT,
+      to: input.email,
+      subject: ResetPasswordSubject,
+      text: `${ResetPasswordText}: ${rawToken}`,
+      option: EEmailOption.TEXT,
+      type: ENotificationType.RESET_PASSWORD,
+    };
+    await this.notiService.sendEmail(emailData, account._id);
+
+    const isExist = await this.verifyRepo.findOne({ userId: account._id });
+    if (isExist) {
+      await this.verifyRepo.updateOne(
+        { userId: account._id },
+        passwordResetToken,
+      );
+    } else {
+      await this.verifyRepo.create({
+        ...passwordResetToken,
+        userId: account._id,
+      });
+    }
+    return {
+      status: 'successfully',
+    };
   }
 }

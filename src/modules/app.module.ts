@@ -5,6 +5,7 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { VerifyModule } from './verify/verify.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { VerifyModule } from './verify/verify.module';
     AuthModule,
     CommonModule,
     VerifyModule,
+    NotificationModule,
   ],
 })
 export class AppModule {}

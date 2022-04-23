@@ -1,9 +1,9 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { BaseDocument } from 'src/shared/mongoose/base.document';
+import { EmbeddedDocument } from 'src/shared/mongoose/base.document';
 import { DefaultSchemaOptions } from 'src/shared/mongoose/schema-option';
 
 @Schema(DefaultSchemaOptions)
-export class VerifyDocument extends BaseDocument {
+export class VerifyDocument extends EmbeddedDocument {
   @Prop({ required: true })
   userId: string;
 
