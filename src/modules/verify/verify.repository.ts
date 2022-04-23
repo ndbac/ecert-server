@@ -3,16 +3,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseRepository } from 'src/shared/mongoose/base.repository';
 import { CollectionName } from 'src/shared/types';
-import { AuthDocument } from './auth.model';
+import { VerifyDocument } from './verify.model';
 
 @Injectable()
-export class AuthRepository
-  extends BaseRepository<AuthDocument>
+export class VerifyRepository
+  extends BaseRepository<VerifyDocument>
   implements OnApplicationBootstrap
 {
   constructor(
-    @InjectModel(CollectionName.AUTH)
-    model: Model<AuthDocument>,
+    @InjectModel(CollectionName.VERIFICATION)
+    model: Model<VerifyDocument>,
   ) {
     super(model);
   }

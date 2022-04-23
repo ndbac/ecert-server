@@ -22,6 +22,18 @@ export class AccountLoginDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
+  password: string;
+}
+
+export class CreateAccountDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
   @MinLength(8)
   @MaxLength(20)
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
@@ -29,9 +41,7 @@ export class AccountLoginDto {
       'password must contain uppercase letters and numbers or special characters',
   })
   password: string;
-}
 
-export class CreateAccountDto extends AccountLoginDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()

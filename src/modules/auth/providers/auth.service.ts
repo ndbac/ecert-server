@@ -1,5 +1,5 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
-import { AccountRepository } from '../auth.repository';
+import { AuthRepository } from '../auth.repository';
 import {
   AccountLoginDto,
   CreateAccountDto,
@@ -10,9 +10,9 @@ import { JwtService } from '../../common/jwt/jwt.service';
 import { CryptoService } from '../../common/crypto/crypto.service';
 
 @Injectable()
-export class AccountService {
+export class AuthService {
   constructor(
-    private readonly accountRepo: AccountRepository,
+    private readonly authRepo: AuthRepository,
     private readonly hashingSrv: HashingService,
     private readonly jwtService: JwtService,
     private readonly cryptoService: CryptoService,
@@ -24,11 +24,11 @@ export class AccountService {
       password: await this.hashingSrv.hash(data.password),
       active: data.active || true,
     };
-    return await this.accountRepo.create(account);
+    return await this.authRepo.create(account);
   }
 
   async login(data: AccountLoginDto) {
-    const account = await this.accountRepo.findOneOrFail({ email: data.email });
+    const account = await this.authRepo.findOneOrFail({ email: data.email });
     if (await this.hashingSrv.compare(data.password, account.password)) {
       const data = {
         userId: account._id,
@@ -39,7 +39,7 @@ export class AccountService {
       const encryptedAccessToken = await this.cryptoService.encryptText(
         access_token,
       );
-      await this.accountRepo.updateById(account._id, {
+      await this.authRepo.updateById(account._id, {
         access_token: encryptedAccessToken,
       });
       return {
@@ -47,17 +47,19 @@ export class AccountService {
         expires_in: process.env.TOKEN_EXPIRE_TIME,
       };
     }
+    throw new ForbiddenException('invalid password');
   }
 
   async refreshToken(data: RefreshTokenDto) {
-    const account = await this.accountRepo.findOneOrFail({ _id: data.userId });
-    const userToken = await this.cryptoService.decryptText(
-      account.access_token,
+    const account = await this.authRepo.findOneOrFail({ _id: data.userId });
+    const checkToken = await this.cryptoService.compare(
+      data.access_token,
+      account.access_token || '',
     );
-    if (userToken !== data.access_token) {
+    if (!checkToken) {
       throw new ForbiddenException('invalid access token');
     }
-    await this.accountRepo.updateById(account._id, { access_token: null });
+    await this.authRepo.updateById(account._id, { access_token: null });
     return {
       status: 'successfully',
     };

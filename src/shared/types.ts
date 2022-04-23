@@ -1,5 +1,6 @@
 export enum CollectionName {
-  ACCOUNTS = 'accounts',
+  AUTH = 'auth',
+  VERIFICATION = 'verification',
 }
 
 export enum IamNamespace {

@@ -14,7 +14,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
-import { AccountService } from '../providers/auth.service';
+import { AuthService } from '../providers/auth.service';
 import {
   CreateAccountDto,
   AccountLoginDto,
@@ -30,8 +30,8 @@ import { ExtractAuthInput } from 'src/decorators/auth-input.decorator';
 @Controller('auth')
 @ApiTags('auth')
 @UsePipes(ValidationPipe)
-export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({
     operationId: 'createAccount',
@@ -46,7 +46,7 @@ export class AccountController {
   @ApiBody({ type: CreateAccountDto })
   @Post('/register')
   async createAccount(@Body() data: CreateAccountDto) {
-    return await this.accountService.register(data);
+    return await this.authService.register(data);
   }
 
   @ApiOperation({
@@ -62,7 +62,7 @@ export class AccountController {
   @ApiBody({ type: AccountLoginDto })
   @Put('/login')
   async loginAccount(@Body() data: AccountLoginDto) {
-    return await this.accountService.login(data);
+    return await this.authService.login(data);
   }
 
   @ApiOperation({
@@ -78,6 +78,6 @@ export class AccountController {
   @SecurityDecorator()
   @Put('/logout')
   async logoutAccount(@ExtractAuthInput() data: RefreshTokenDto) {
-    return await this.accountService.refreshToken(data);
+    return await this.authService.refreshToken(data);
   }
 }

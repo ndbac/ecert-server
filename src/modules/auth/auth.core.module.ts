@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CollectionName } from 'src/shared/types';
-import { AccountDocument } from './auth.model';
-import { AccountRepository } from './auth.repository';
+import { AuthDocument } from './auth.model';
+import { AuthRepository } from './auth.repository';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: CollectionName.ACCOUNTS,
-        schema: AccountDocument.schema,
+        name: CollectionName.AUTH,
+        schema: AuthDocument.schema,
       },
     ]),
   ],
-  providers: [AccountRepository],
-  exports: [AccountRepository],
+  providers: [AuthRepository],
+  exports: [AuthRepository],
 })
-export class AccountCoreModule {}
+export class AuthCoreModule {}

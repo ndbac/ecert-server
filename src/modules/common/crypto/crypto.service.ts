@@ -17,6 +17,11 @@ export class CryptoService {
     return bytes.toString(CryptoJS.enc.Utf8);
   }
 
+  async compare(rawText: string, encryptedText: string) {
+    const decryptedText = await this.decryptText(encryptedText);
+    return rawText === decryptedText;
+  }
+
   async encryptObject(rawObject: object) {
     return CryptoJS.AES.encrypt(
       JSON.stringify(rawObject),

@@ -4,7 +4,7 @@ import { IamNamespace } from 'src/shared/types';
 import { DefaultSchemaOptions } from 'src/shared/mongoose/schema-option';
 
 @Schema(DefaultSchemaOptions)
-export class AccountDocument extends BaseDocument {
+export class AuthDocument extends BaseDocument {
   @Prop({ required: true, unique: true })
   email: string;
 
