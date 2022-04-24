@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  ForbiddenException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { VerifyRepository } from '../verify.repository';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { PasswordResetInputDto } from '../dto/verify.dto';
