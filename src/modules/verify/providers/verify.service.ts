@@ -70,7 +70,8 @@ export class VerifyService {
       });
     }
     return {
-      status: 'successfully',
+      status: 'email sent successfully',
+      email: account.email,
     };
   }
 
@@ -107,7 +108,8 @@ export class VerifyService {
       });
     }
     return {
-      status: 'successfully',
+      status: 'email sent successfully',
+      email: input.email,
     };
   }
 }

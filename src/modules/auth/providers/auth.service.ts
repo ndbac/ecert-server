@@ -8,7 +8,6 @@ import {
 import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
 import { CryptoService } from '../../common/crypto/crypto.service';
-import { getTime } from 'date-fns';
 
 @Injectable()
 export class AuthService {

@@ -26,6 +26,9 @@ export class AuthDocument extends BaseDocument {
   @Prop({ default: false, required: true })
   verify: boolean;
 
+  @Prop({ default: new Date(), required: true })
+  passwordChanged: Date;
+
   @Prop({ default: IamNamespace.USER, required: true })
   namespace: IamNamespace;
 }

@@ -1,12 +1,17 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { CommonModule } from '../common/common.module';
 import { NotificationCoreModule } from './notification.core.module';
 import { NotificationService } from './providers/notification.service';
 import { NotificationController } from './controllers/notification.controller';
+import { UserMiddleware } from 'src/middlewares/user.middleware';
 
 @Module({
   imports: [NotificationCoreModule, CommonModule],
   providers: [NotificationService],
   controllers: [NotificationController],
 })
-export class NotificationModule {}
+export class NotificationModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(UserMiddleware).forRoutes(NotificationController);
+  }
+}
