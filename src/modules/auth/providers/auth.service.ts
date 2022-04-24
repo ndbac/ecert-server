@@ -10,7 +10,7 @@ import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { TokenDetailsDto } from 'src/shared/user.dto';
-import { getTime } from 'date-fns';
+// import { getTime } from 'date-fns';
 
 @Injectable()
 export class AuthService {
@@ -63,12 +63,6 @@ export class AuthService {
     const account = await this.authRepo.findOneOrFail({
       _id: userData.user.userId,
     });
-    if (
-      getTime(userData.token.tokenIssue) <
-      getTime(account.passwordChanged) / 1000
-    ) {
-      throw new ForbiddenException('invalid token');
-    }
     if (
       await this.hashingSrv.compare(passwordData.oldPassword, account.password)
     ) {

@@ -4,9 +4,10 @@ import { NotificationCoreModule } from './notification.core.module';
 import { NotificationService } from './providers/notification.service';
 import { NotificationController } from './controllers/notification.controller';
 import { UserMiddleware } from 'src/middlewares/user.middleware';
+import { AuthCoreModule } from '../auth/auth.core.module';
 
 @Module({
-  imports: [NotificationCoreModule, CommonModule],
+  imports: [NotificationCoreModule, CommonModule, AuthCoreModule],
   providers: [NotificationService],
   controllers: [NotificationController],
 })
