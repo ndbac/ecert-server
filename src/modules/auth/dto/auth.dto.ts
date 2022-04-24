@@ -58,17 +58,6 @@ export class CreateAccountDto {
   active: boolean;
 }
 
-export class RefreshTokenDto {
-  @ApiProperty({ type: String })
-  @IsNotEmpty()
-  @IsString()
-  userId: string;
-
-  @IsNotEmpty({ message: 'invalid token' })
-  @IsString({ message: 'invalid token' })
-  access_token: string;
-}
-
 export class UserDataDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()

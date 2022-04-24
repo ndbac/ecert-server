@@ -7,14 +7,12 @@ import { AuthRepository } from '../auth.repository';
 import {
   AccountLoginDto,
   CreateAccountDto,
-  RefreshTokenDto,
   ChangePasswordDto,
 } from '../dto/auth.dto';
 import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { TokenDetailsDto } from 'src/shared/user.dto';
-// import { getTime } from 'date-fns';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +29,14 @@ export class AuthService {
       password: await this.hashingSrv.hash(data.password),
       active: data.active || true,
     };
-    return await this.authRepo.create(account);
+    const createdAccount = await this.authRepo.create(account);
+    return {
+      userId: createdAccount._id,
+      email: createdAccount.email,
+      firstName: createdAccount.firstName,
+      lastName: createdAccount.lastName,
+      createdAt: createdAccount.createdAt,
+    };
   }
 
   async login(data: AccountLoginDto) {

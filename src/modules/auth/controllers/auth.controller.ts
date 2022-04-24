@@ -18,12 +18,12 @@ import { AuthService } from '../providers/auth.service';
 import {
   CreateAccountDto,
   AccountLoginDto,
-  RefreshTokenDto,
   ChangePasswordDto,
 } from '../dto/auth.dto';
 import {
   AccountResponseDto,
   AccountLoginResponseDto,
+  ChangePasswordResponseDto,
 } from '../dto/auth-response.dto';
 import { SecurityDecorator } from 'src/decorators/security-input.decorator';
 import { User } from 'src/decorators/user.decorator';
@@ -75,6 +75,7 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'password changed',
+    type: ChangePasswordResponseDto,
   })
   @ApiBody({ type: ChangePasswordDto })
   @SecurityDecorator()
