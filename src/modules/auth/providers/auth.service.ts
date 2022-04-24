@@ -4,10 +4,13 @@ import {
   AccountLoginDto,
   CreateAccountDto,
   RefreshTokenDto,
+  ChangePasswordDto,
 } from '../dto/auth.dto';
 import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { TokenDetailsDto } from 'src/shared/user.dto';
+import { getTime } from 'date-fns';
 
 @Injectable()
 export class AuthService {
@@ -48,6 +51,37 @@ export class AuthService {
         expires_in: new Date(
           Date.now() + parseInt(process.env.TOKEN_EXPIRE_TIME),
         ),
+      };
+    }
+    throw new ForbiddenException('invalid password');
+  }
+
+  async changePassword(
+    userData: TokenDetailsDto,
+    passwordData: ChangePasswordDto,
+  ) {
+    const account = await this.authRepo.findOneOrFail({
+      _id: userData.user.userId,
+    });
+    if (
+      getTime(userData.token.tokenIssue) <
+      getTime(account.passwordChanged) / 1000
+    ) {
+      throw new ForbiddenException('invalid token');
+    }
+    if (
+      await this.hashingSrv.compare(passwordData.oldPassword, account.password)
+    ) {
+      const hashedNewPassword = await this.hashingSrv.hash(
+        passwordData.newPassword,
+      );
+      await this.authRepo.updateById(account._id, {
+        password: hashedNewPassword,
+        passwordChanged: new Date(),
+      });
+      return {
+        status: 'password changed successfully',
+        userId: userData.user.userId,
       };
     }
     throw new ForbiddenException('invalid password');

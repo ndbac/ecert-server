@@ -68,3 +68,33 @@ export class RefreshTokenDto {
   @IsString({ message: 'invalid token' })
   access_token: string;
 }
+
+export class UserDataDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  oldPassword: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  newPassword: string;
+}
+
+export class ChangePasswordDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  oldPassword: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(8)
+  @MaxLength(20)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message:
+      'new password must contain uppercase letters and numbers or special characters',
+  })
+  newPassword: string;
+}

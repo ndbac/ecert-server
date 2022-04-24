@@ -21,9 +21,11 @@ export class UserMiddleware implements NestMiddleware {
       req['user'] = {
         namespace: data.data.namespace,
         userId: data.data.userId,
-        identifier: data.data.namespace,
-        iat: data.iat,
-        exp: data.exp,
+        email: data.data.email,
+      };
+      req['token'] = {
+        tokenIssue: data.iat,
+        tokenExpires: data.exp,
       };
       return next();
     } catch (error) {

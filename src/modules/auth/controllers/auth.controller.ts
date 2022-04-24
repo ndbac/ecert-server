@@ -19,6 +19,7 @@ import {
   CreateAccountDto,
   AccountLoginDto,
   RefreshTokenDto,
+  ChangePasswordDto,
 } from '../dto/auth.dto';
 import {
   AccountResponseDto,
@@ -26,6 +27,8 @@ import {
 } from '../dto/auth-response.dto';
 import { SecurityDecorator } from 'src/decorators/security-input.decorator';
 import { ExtractAuthInput } from 'src/decorators/auth-input.decorator';
+import { User } from 'src/decorators/user.decorator';
+import { TokenDetailsDto } from 'src/shared/user.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -63,6 +66,25 @@ export class AuthController {
   @Put('/login')
   async loginAccount(@Body() data: AccountLoginDto) {
     return await this.authService.login(data);
+  }
+
+  @ApiOperation({
+    operationId: 'changePassword',
+    summary: 'change account password',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'password changed',
+  })
+  @ApiBody({ type: ChangePasswordDto })
+  @SecurityDecorator()
+  @Put('/change-password')
+  async changePassword(
+    @User('') userData: TokenDetailsDto,
+    @Body() passwordData: ChangePasswordDto,
+  ) {
+    return await this.authService.changePassword(userData, passwordData);
   }
 
   @ApiOperation({

@@ -9,10 +9,19 @@ export const User = createParamDecorator(
         return request.user.userId;
       case 'namespace':
         return request.user.namespace;
-      case 'identifier':
-        return request.user.identifier;
-      default:
+      case 'email':
+        return request.user.email;
+      case 'tokenIssue':
+        return request.token.tokenIssue;
+      case 'tokenExpires':
+        return request.token.tokenExpires;
+      case 'user':
         return request.user;
+      default:
+        return {
+          user: request.user,
+          token: request.token,
+        };
     }
   },
 );
