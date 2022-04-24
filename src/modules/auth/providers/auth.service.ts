@@ -1,4 +1,8 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { AuthRepository } from '../auth.repository';
 import {
   AccountLoginDto,
@@ -66,6 +70,11 @@ export class AuthService {
     if (
       await this.hashingSrv.compare(passwordData.oldPassword, account.password)
     ) {
+      if (passwordData.newPassword === passwordData.oldPassword) {
+        throw new BadRequestException(
+          'new password is identical with old password',
+        );
+      }
       const hashedNewPassword = await this.hashingSrv.hash(
         passwordData.newPassword,
       );
@@ -81,18 +90,9 @@ export class AuthService {
     throw new ForbiddenException('invalid password');
   }
 
-  async refreshToken(data: RefreshTokenDto) {
-    const account = await this.authRepo.findOneOrFail({ _id: data.userId });
-    const checkToken = await this.cryptoService.compare(
-      data.access_token,
-      account.access_token || '',
-    );
-    if (!checkToken) {
-      throw new ForbiddenException('invalid access token');
-    }
-    await this.authRepo.updateById(account._id, { access_token: null });
+  async makeTokenInvalid(data: TokenDetailsDto) {
     return {
-      status: 'successfully',
+      status: 'this route is not supported yet',
     };
   }
 }

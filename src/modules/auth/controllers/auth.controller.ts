@@ -26,7 +26,6 @@ import {
   AccountLoginResponseDto,
 } from '../dto/auth-response.dto';
 import { SecurityDecorator } from 'src/decorators/security-input.decorator';
-import { ExtractAuthInput } from 'src/decorators/auth-input.decorator';
 import { User } from 'src/decorators/user.decorator';
 import { TokenDetailsDto } from 'src/shared/user.dto';
 
@@ -88,18 +87,17 @@ export class AuthController {
   }
 
   @ApiOperation({
-    operationId: 'refreshToken',
-    summary: 'refresh access token',
+    operationId: 'logoutAccount',
+    summary: 'logout account & make token invalid',
   })
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Token refreshed',
+    description: 'account logout successfully',
   })
-  @ApiBody({ type: RefreshTokenDto })
   @SecurityDecorator()
   @Put('/logout')
-  async logoutAccount(@ExtractAuthInput() data: RefreshTokenDto) {
-    return await this.authService.refreshToken(data);
+  async logoutAccount(@User('') userData: TokenDetailsDto) {
+    return await this.authService.makeTokenInvalid(userData);
   }
 }

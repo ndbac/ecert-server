@@ -5,10 +5,7 @@ import {
 } from '@nestjs/common';
 import { VerifyRepository } from '../verify.repository';
 import { CryptoService } from '../../common/crypto/crypto.service';
-import {
-  VerifyAccountInputDto,
-  PasswordResetInputDto,
-} from '../dto/verify.dto';
+import { PasswordResetInputDto } from '../dto/verify.dto';
 import { AuthRepository } from 'src/modules/auth/auth.repository';
 import { NotificationService } from 'src/modules/notification/providers/notification.service';
 import {
@@ -19,6 +16,7 @@ import {
 } from 'src/shared/email/sample-email';
 import { EEmailOption } from '../../util/types';
 import { ENotificationType } from '../../notification/types';
+import { TokenDetailsDto } from 'src/shared/user.dto';
 
 @Injectable()
 export class VerifyService {
@@ -29,19 +27,14 @@ export class VerifyService {
     private readonly notiService: NotificationService,
   ) {}
 
-  async createVerifycationToken(input: VerifyAccountInputDto) {
-    const account = await this.authRepo.findOneOrFail({ _id: input.userId });
+  async createVerifycationToken(input: TokenDetailsDto) {
+    const account = await this.authRepo.findOneOrFail({
+      _id: input.user.userId,
+    });
     if (account.verify) {
       throw new BadRequestException(
         `user id: ${account._id} has already verified`,
       );
-    }
-    const checkToken = await this.cryptoService.compare(
-      input.access_token,
-      account.access_token || '',
-    );
-    if (!checkToken) {
-      throw new ForbiddenException('invalid access token');
     }
     const rawToken = await this.cryptoService.generateRandomBytes(32);
     const encryptedToken = await this.cryptoService.encryptText(rawToken);
@@ -60,18 +53,19 @@ export class VerifyService {
       type: ENotificationType.VERIFICATION_ACCOUNT,
     };
     await this.notiService.sendEmail(emailData, account._id);
-    const isExist = await this.verifyRepo.findOne({ userId: input.userId });
+    const isExist = await this.verifyRepo.findOne({ userId: account._id });
     if (isExist) {
       await this.verifyRepo.updateById(isExist._id, verifyToken);
     } else {
       await this.verifyRepo.create({
         ...verifyToken,
-        userId: input.userId,
+        userId: account._id,
       });
     }
     return {
       status: 'email sent successfully',
-      email: account.email,
+      recipient: account.email,
+      userId: account._id,
     };
   }
 

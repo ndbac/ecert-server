@@ -19,7 +19,8 @@ import {
   PasswordResetInputDto,
 } from '../dto/verify.dto';
 import { SecurityDecorator } from 'src/decorators/security-input.decorator';
-import { ExtractAuthInput } from 'src/decorators/auth-input.decorator';
+import { User } from 'src/decorators/user.decorator';
+import { TokenDetailsDto } from 'src/shared/user.dto';
 
 @Controller('verify')
 @ApiTags('verify')
@@ -36,13 +37,10 @@ export class VerifyController {
     status: HttpStatus.OK,
     description: 'Verify token created',
   })
-  @ApiBody({ type: VerifyAccountInputDto })
   @SecurityDecorator()
   @Put('/createVerifyAccountToken')
-  async createVerifyAccountToken(
-    @ExtractAuthInput() data: VerifyAccountInputDto,
-  ) {
-    return await this.verifyService.createVerifycationToken(data);
+  async createVerifyAccountToken(@User('') userData: TokenDetailsDto) {
+    return await this.verifyService.createVerifycationToken(userData);
   }
 
   @ApiOperation({
