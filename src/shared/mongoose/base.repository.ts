@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import {
+  ClientSession,
   Document,
   Model,
   SaveOptions,
@@ -8,8 +9,13 @@ import {
   UpdateQuery,
   UpdateWithAggregationPipeline,
 } from 'mongoose';
+import { TransactionOptions } from 'mongodb';
 import { merge } from 'lodash';
 import { isObjectId } from './helpers';
+
+interface IDeleteOptions {
+  session?: ClientSession | null;
+}
 
 export class BaseRepository<T extends Document> {
   protected primaryKey = '_id';
@@ -159,6 +165,62 @@ export class BaseRepository<T extends Document> {
       doc,
       merge({ new: true, upsert: true, setDefaultsOnInsert: true }, options),
     );
+  }
+
+  async delete(doc: T, options?: IDeleteOptions): Promise<T>;
+  async delete(docs: T[], options?: IDeleteOptions): Promise<T[]>;
+  async delete(docs: T | T[], options?: IDeleteOptions): Promise<T | T[]> {
+    if (Array.isArray(docs)) {
+      const result: T[] = [];
+      for (const doc of docs) {
+        result.push(await this.delete(doc, options));
+      }
+      return result;
+    }
+    if (options && options.session) {
+      docs.$session(options.session);
+    }
+    return docs.remove();
+  }
+
+  async deleteById(id: any, options?: QueryOptions): Promise<T | null> {
+    if (!isObjectId(id)) return null;
+    return this.deleteOne({ _id: id });
+  }
+
+  async deleteMany(
+    conditions: FilterQuery<T>,
+    options?: IDeleteOptions,
+  ): Promise<number> {
+    let query = this.model.deleteMany(conditions);
+    if (options && options.session) {
+      query = query.session(options.session);
+    }
+    const result = await query.exec();
+    return result.ok ? result.n || 0 : 0;
+  }
+
+  async deleteOne(
+    conditions: FilterQuery<T>,
+    options?: QueryOptions,
+  ): Promise<T | null> {
+    return this.model.findOneAndDelete(conditions, options).exec();
+  }
+
+  async withTransaction<U>(
+    fn: (session: ClientSession) => Promise<U>,
+    options?: TransactionOptions,
+  ): Promise<U | null> {
+    const session = await this.model.db.startSession();
+    let result: U | null = null;
+    try {
+      await session.withTransaction(async (ses) => {
+        result = await fn(ses);
+      }, options);
+      return result;
+    } finally {
+      session.endSession();
+    }
   }
 
   throwErrorNotFound(): never {

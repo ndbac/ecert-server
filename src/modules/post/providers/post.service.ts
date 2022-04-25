@@ -1,9 +1,11 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PostRepository } from '../post.repository';
 import { TokenDetailsDto } from 'src/shared/user.dto';
-import { CreatePostDto, UpdatePostDto } from '../dto/post.dto';
-import slugify from 'slugify';
-import { CryptoService } from 'src/modules/common/crypto/crypto.service';
+import { CreatePostDto, UpdatePostDto, DeletePostsDto } from '../dto/post.dto';
 import { IamNamespace } from 'src/shared/types';
 import { makeSlug } from 'src/shared/helpers';
 
@@ -37,5 +39,32 @@ export class PostService {
       ...postData,
       slug: newSlug,
     });
+  }
+
+  async deletePosts(tokenData: TokenDetailsDto, input: DeletePostsDto) {
+    const checkingValidID = input.postList.map(async (e) => {
+      const post = await this.postRepo.findById(e);
+      if (post === null || post === undefined) {
+        throw new BadRequestException(`postId: ${e} is not valid`);
+      }
+      if (
+        post.userId !== tokenData.user.userId &&
+        tokenData.user.namespace !== IamNamespace.ADMIN
+      ) {
+        throw new ForbiddenException(
+          `do not have permission to delete post with id ${e}`,
+        );
+      }
+    });
+    await Promise.all(checkingValidID);
+
+    const promises = input.postList.map(async (e) => {
+      await this.postRepo.deleteById(e);
+    });
+    await Promise.all(promises);
+    return {
+      status: 'deleted successfully',
+      deletedList: input.postList,
+    };
   }
 }

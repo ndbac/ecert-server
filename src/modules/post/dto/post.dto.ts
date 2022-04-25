@@ -52,3 +52,10 @@ export class UpdatePostDto {
   @IsArray()
   categoriesId?: string[];
 }
+
+export class DeletePostsDto {
+  @ApiProperty({ type: Array })
+  @IsNotEmpty()
+  @IsArray()
+  postList: string[];
+}
