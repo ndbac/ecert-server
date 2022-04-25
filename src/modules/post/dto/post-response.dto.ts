@@ -2,13 +2,7 @@ import {
   ApiProperty,
   ApiPropertyOptional,
 } from '@nestjs/swagger/dist/decorators';
-import {
-  IsNotEmpty,
-  IsString,
-  IsArray,
-  IsOptional,
-  IsNumber,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsArray, IsOptional } from 'class-validator';
 import { BaseResponseDto } from 'src/shared/base.dto';
 
 export class PostResponseDto extends BaseResponseDto {
@@ -44,10 +38,10 @@ export class PostResponseDto extends BaseResponseDto {
 }
 
 export class DeletePostsResDto {
-  @ApiProperty({ type: Number })
+  @ApiProperty({ type: String })
   @IsNotEmpty()
-  @IsNumber()
-  deletedPostQuantity: number;
+  @IsString()
+  status: string;
 
   @ApiProperty({ type: Array })
   @IsNotEmpty()
