@@ -25,3 +25,30 @@ export class CreatePostDto {
   @IsArray()
   categoriesId?: string[];
 }
+
+export class UpdatePostDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  postId: string;
+
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiPropertyOptional({ type: Array })
+  @IsOptional()
+  @IsArray()
+  photoUrl?: string[];
+
+  @ApiPropertyOptional({ type: Array })
+  @IsOptional()
+  @IsArray()
+  categoriesId?: string[];
+}

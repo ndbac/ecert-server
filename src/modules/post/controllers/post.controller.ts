@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Body,
+  Param,
   HttpCode,
   HttpStatus,
   UsePipes,
@@ -44,5 +45,26 @@ export class PostController {
     @Body() postData: CreatePostDto,
   ) {
     return await this.postService.createPost(userData, postData);
+  }
+
+  @ApiOperation({
+    operationId: 'updatePost',
+    summary: 'update a post',
+  })
+  @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'post updated successfully',
+    type: PostResponseDto,
+  })
+  @ApiBody({ type: CreatePostDto })
+  @SecurityDecorator()
+  @Post('/:postId')
+  async updatePost(
+    @User('') userData: TokenDetailsDto,
+    @Body() postData: CreatePostDto,
+    @Param('postId') postId: string,
+  ) {
+    return await this.postService.updatePost(userData, { ...postData, postId });
   }
 }

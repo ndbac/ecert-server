@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger/dist/decorators';
-import { IsNotEmpty, IsString, IsDate, IsEmail } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsDate,
+  IsEmail,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class AccountResponseDto {
@@ -49,6 +55,7 @@ export class AccountLoginResponseDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  @ValidateNested()
   @Type(() => TokenDto)
   token: TokenDto;
 }

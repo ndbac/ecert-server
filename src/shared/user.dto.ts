@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger/dist/decorators';
-import { IsNotEmpty, IsString, IsDate } from 'class-validator';
+import { IsNotEmpty, IsString, IsDate, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IamNamespace } from './types';
 
 export class TokenDataDto {
   @ApiProperty({ type: Date })
@@ -15,10 +16,10 @@ export class TokenDataDto {
 }
 
 export class UserDataDto {
-  @ApiProperty({ type: String })
+  @ApiProperty({ enum: IamNamespace })
   @IsNotEmpty()
-  @IsString()
-  namespace: string;
+  @IsEnum(IamNamespace)
+  namespace: IamNamespace;
 
   @ApiProperty({ type: String })
   @IsNotEmpty()

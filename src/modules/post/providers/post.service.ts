@@ -1,27 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PostRepository } from '../post.repository';
 import { TokenDetailsDto } from 'src/shared/user.dto';
-import { CreatePostDto } from '../dto/post.dto';
+import { CreatePostDto, UpdatePostDto } from '../dto/post.dto';
 import slugify from 'slugify';
 import { CryptoService } from 'src/modules/common/crypto/crypto.service';
+import { IamNamespace } from 'src/shared/types';
+import { makeSlug } from 'src/shared/helpers';
 
 @Injectable()
 export class PostService {
-  constructor(
-    private readonly postRepo: PostRepository,
-    private readonly cryptoSrv: CryptoService,
-  ) {}
+  constructor(private readonly postRepo: PostRepository) {}
 
   async createPost(tokenData: TokenDetailsDto, postData: CreatePostDto) {
-    const slugEnding = await this.cryptoSrv.generateRandomBytes(2);
+    const slug = makeSlug(postData.title);
     const post = {
       userId: tokenData.user.userId,
       title: postData.title,
       description: postData.description,
       photoUrl: postData.photoUrl,
       categoriesId: postData.categoriesId,
-      slug: `${slugify(postData.title, { locale: 'vi' })}-${slugEnding}`,
+      slug,
     };
     return await this.postRepo.create(post);
+  }
+
+  async updatePost(tokenData: TokenDetailsDto, postData: UpdatePostDto) {
+    const post = await this.postRepo.findByIdOrFail(postData.postId);
+    if (
+      post.userId !== tokenData.user.userId &&
+      tokenData.user.namespace !== IamNamespace.ADMIN
+    ) {
+      throw new ForbiddenException('token cannot access this route');
+    }
+    const newSlug = makeSlug(postData.title);
+    return await this.postRepo.updateById(postData.postId, {
+      ...postData,
+      slug: newSlug,
+    });
   }
 }
