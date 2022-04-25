@@ -24,14 +24,14 @@ import { CreatePostDto, DeletePostsDto } from '../dto/post.dto';
 import { PostResponseDto, DeletePostsResDto } from '../dto/post-response.dto';
 
 @Controller('post')
-@ApiTags('post')
+@ApiTags('creator.post')
 @UsePipes(ValidationPipe)
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @ApiOperation({
     operationId: 'createPost',
-    summary: 'create a post',
+    summary: 'creator create a post',
   })
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
@@ -51,7 +51,7 @@ export class PostController {
 
   @ApiOperation({
     operationId: 'updatePost',
-    summary: 'update a post',
+    summary: 'creator update a post',
   })
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
@@ -72,7 +72,7 @@ export class PostController {
 
   @ApiOperation({
     operationId: 'deletePosts',
-    summary: 'delete posts',
+    summary: 'creator delete posts',
   })
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -85,8 +85,8 @@ export class PostController {
   @Delete('')
   async deletePosts(
     @User('') userData: TokenDetailsDto,
-    @Body() postList: DeletePostsDto,
+    @Body() postIdList: DeletePostsDto,
   ) {
-    return await this.postService.deletePosts(userData, postList);
+    return await this.postService.deletePosts(userData, postIdList);
   }
 }

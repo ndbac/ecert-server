@@ -41,6 +41,15 @@ export class BaseRepository<T extends Document> {
     return this.save(new this.model(docs as any), options);
   }
 
+  async find(
+    conditions: FilterQuery<T>,
+    options?: QueryOptions,
+    projection: any = null,
+  ): Promise<T[]> {
+    const query = this.model.find(conditions, projection, options);
+    return query.exec();
+  }
+
   async findById(
     id: any,
     options?: QueryOptions,

@@ -20,10 +20,10 @@ export class CreatePostDto {
   @IsArray()
   photoUrl: string[];
 
-  @ApiPropertyOptional({ type: Array })
+  @ApiPropertyOptional({ type: String })
   @IsOptional()
-  @IsArray()
-  categoriesId?: string[];
+  @IsString()
+  categoryId?: string;
 }
 
 export class UpdatePostDto {
@@ -47,15 +47,15 @@ export class UpdatePostDto {
   @IsArray()
   photoUrl?: string[];
 
-  @ApiPropertyOptional({ type: Array })
+  @ApiPropertyOptional({ type: String })
   @IsOptional()
-  @IsArray()
-  categoriesId?: string[];
+  @IsString()
+  categoryId?: string;
 }
 
 export class DeletePostsDto {
   @ApiProperty({ type: Array })
   @IsNotEmpty()
   @IsArray()
-  postList: string[];
+  postIdList: string[];
 }

@@ -20,7 +20,7 @@ export class PostService {
       title: postData.title,
       description: postData.description,
       photoUrl: postData.photoUrl,
-      categoriesId: postData.categoriesId,
+      categoryId: postData.categoryId,
       slug,
     };
     return await this.postRepo.create(post);
@@ -42,7 +42,7 @@ export class PostService {
   }
 
   async deletePosts(tokenData: TokenDetailsDto, input: DeletePostsDto) {
-    const checkingValidID = input.postList.map(async (e) => {
+    const checkingValidID = input.postIdList.map(async (e) => {
       const post = await this.postRepo.findById(e);
       if (post === null || post === undefined) {
         throw new BadRequestException(`postId: ${e} is not valid`);
@@ -58,13 +58,13 @@ export class PostService {
     });
     await Promise.all(checkingValidID);
 
-    const promises = input.postList.map(async (e) => {
+    const promises = input.postIdList.map(async (e) => {
       await this.postRepo.deleteById(e);
     });
     await Promise.all(promises);
     return {
       status: 'deleted successfully',
-      deletedList: input.postList,
+      deletedList: input.postIdList,
     };
   }
 }

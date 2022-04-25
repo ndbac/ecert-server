@@ -4,7 +4,6 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { IAuthorizedRequest } from 'src/modules/auth/auth.types';
-import _ from 'lodash';
 
 export const User = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {

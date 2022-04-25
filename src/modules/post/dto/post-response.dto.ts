@@ -31,10 +31,10 @@ export class PostResponseDto extends BaseResponseDto {
   @IsArray()
   photoUrl: string[];
 
-  @ApiPropertyOptional({ type: Array })
+  @ApiPropertyOptional({ type: String })
   @IsOptional()
-  @IsArray()
-  categoriesId?: string[];
+  @IsString()
+  categoryId?: string;
 }
 
 export class DeletePostsResDto {

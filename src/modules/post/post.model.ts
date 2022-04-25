@@ -23,5 +23,5 @@ export class PostDocument extends EmbeddedDocument {
   photoUrl: string[];
 
   @Prop({ default: null, nullable: true })
-  categoriesId: string[];
+  categoryId: string;
 }

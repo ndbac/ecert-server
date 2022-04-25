@@ -5,11 +5,13 @@ import { UserMiddleware } from 'src/middlewares/user.middleware';
 import { PostController } from './controllers/post.controller';
 import { AuthCoreModule } from '../auth/auth.core.module';
 import { PostService } from './providers/post.service';
+import { PostUserService } from './providers/post-user.service';
+import { PostUserController } from './controllers/post-user.controller';
 
 @Module({
   imports: [PostCoreModule, CommonModule, AuthCoreModule],
-  providers: [PostService],
-  controllers: [PostController],
+  providers: [PostService, PostUserService],
+  controllers: [PostController, PostUserController],
 })
 export class PostModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

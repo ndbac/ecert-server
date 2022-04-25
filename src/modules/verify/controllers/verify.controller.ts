@@ -14,10 +14,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
 import { VerifyService } from '../providers/verify.service';
-import {
-  VerifyAccountInputDto,
-  PasswordResetInputDto,
-} from '../dto/verify.dto';
+import { PasswordResetInputDto } from '../dto/verify.dto';
 import { SecurityDecorator } from 'src/decorators/security-input.decorator';
 import { User } from 'src/decorators/user.decorator';
 import { TokenDetailsDto } from 'src/shared/user.dto';
