@@ -24,6 +24,7 @@ export class BaseRepository<T extends Document> {
 
   aggregate<X = any>(aggregations?: any[]): Promise<X[]> {
     aggregations = slice(aggregations);
+    console.log(aggregations);
     return this.model.aggregate<T>(aggregations).exec();
   }
 

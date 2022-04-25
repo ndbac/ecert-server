@@ -11,7 +11,6 @@ import {
 import {
   ApiTags,
   ApiParam,
-  ApiQuery,
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
@@ -41,6 +40,22 @@ export class PostUserController {
   }
 
   @ApiOperation({
+    operationId: 'readRandomPosts',
+    summary: 'user read random posts',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'post',
+    type: PostResponseDto,
+  })
+  @ApiParam({ name: 'quantity' })
+  @Get('/random-posts/:quantity')
+  async readRandomPosts(@Param('quantity') quantity: string) {
+    return await this.postUserSvc.readRandomPosts(quantity);
+  }
+
+  @ApiOperation({
     operationId: 'readAPostById',
     summary: 'user read a post by id',
   })
@@ -54,20 +69,5 @@ export class PostUserController {
   @Get('/:postId')
   async readPostById(@Param('postId') postId: string) {
     return await this.postUserSvc.readPostById(postId);
-  }
-
-  @ApiOperation({
-    operationId: 'readRandomPosts',
-    summary: 'user read random posts',
-  })
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'post',
-    type: PostResponseDto,
-  })
-  @Get('/random-posts')
-  async readRandomPosts() {
-    return await this.postUserSvc.readRandomPosts();
   }
 }

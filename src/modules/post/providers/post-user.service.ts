@@ -40,9 +40,8 @@ export class PostUserService {
     return await this.postRepo.findById(postId);
   }
 
-  async readRandomPosts() {
-    return {
-      status: 'this route is not supported yet',
-    };
+  async readRandomPosts(input: string) {
+    const size = parseInt(input);
+    return await this.postRepo.aggregate([{ $sample: { size } }]);
   }
 }
