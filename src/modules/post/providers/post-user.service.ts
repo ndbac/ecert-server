@@ -35,4 +35,8 @@ export class PostUserService {
       { limit, skip, sort },
     );
   }
+
+  async readPostById(postId: string) {
+    return await this.postRepo.findById(postId);
+  }
 }

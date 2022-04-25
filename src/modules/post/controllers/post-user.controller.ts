@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Query,
+  Param,
   HttpCode,
   HttpStatus,
   UsePipes,
@@ -9,6 +10,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiTags,
+  ApiParam,
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
@@ -35,5 +37,21 @@ export class PostUserController {
   @Get('')
   async searchPosts(@Query() query: SearchPostDto) {
     return await this.postUserSvc.readAllPosts(query);
+  }
+
+  @ApiOperation({
+    operationId: 'readAPostById',
+    summary: 'user read a post by id',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'post',
+    type: PostResponseDto,
+  })
+  @ApiParam({ name: 'postId' })
+  @Get('/:postId')
+  async readPostById(@Param('postId') postId: string) {
+    return await this.postUserSvc.readPostById(postId);
   }
 }
