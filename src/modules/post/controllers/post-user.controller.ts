@@ -11,6 +11,7 @@ import {
 import {
   ApiTags,
   ApiParam,
+  ApiQuery,
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
@@ -53,5 +54,20 @@ export class PostUserController {
   @Get('/:postId')
   async readPostById(@Param('postId') postId: string) {
     return await this.postUserSvc.readPostById(postId);
+  }
+
+  @ApiOperation({
+    operationId: 'readRandomPosts',
+    summary: 'user read random posts',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'post',
+    type: PostResponseDto,
+  })
+  @Get('/random-posts')
+  async readRandomPosts() {
+    return await this.postUserSvc.readRandomPosts();
   }
 }

@@ -10,7 +10,7 @@ import {
   UpdateWithAggregationPipeline,
 } from 'mongoose';
 import { TransactionOptions } from 'mongodb';
-import { merge } from 'lodash';
+import { merge, slice } from 'lodash';
 import { isObjectId } from './helpers';
 
 interface IDeleteOptions {
@@ -21,6 +21,11 @@ export class BaseRepository<T extends Document> {
   protected primaryKey = '_id';
 
   constructor(public readonly model: Model<T>) {}
+
+  aggregate<X = any>(aggregations?: any[]): Promise<X[]> {
+    aggregations = slice(aggregations);
+    return this.model.aggregate<T>(aggregations).exec();
+  }
 
   async create(doc: Record<string, unknown>, options?: SaveOptions): Promise<T>;
   async create(

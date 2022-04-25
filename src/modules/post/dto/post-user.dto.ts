@@ -1,5 +1,8 @@
-import { ApiPropertyOptional } from '@nestjs/swagger/dist/decorators';
-import { IsString, IsOptional } from 'class-validator';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+} from '@nestjs/swagger/dist/decorators';
+import { IsString, IsOptional, IsNumber, IsNotEmpty } from 'class-validator';
 
 export class SearchPostDto {
   @ApiPropertyOptional()

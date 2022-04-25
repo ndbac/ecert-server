@@ -39,4 +39,10 @@ export class PostUserService {
   async readPostById(postId: string) {
     return await this.postRepo.findById(postId);
   }
+
+  async readRandomPosts() {
+    return {
+      status: 'this route is not supported yet',
+    };
+  }
 }
