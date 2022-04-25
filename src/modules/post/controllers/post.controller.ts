@@ -18,6 +18,7 @@ import { SecurityDecorator } from 'src/decorators/security-input.decorator';
 import { User } from 'src/decorators/user.decorator';
 import { TokenDetailsDto } from 'src/shared/user.dto';
 import { CreatePostDto } from '../dto/post.dto';
+import { PostResponseDto } from '../dto/post-response.dto';
 
 @Controller('post')
 @ApiTags('post')
@@ -33,6 +34,7 @@ export class PostController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'post created successfully',
+    type: PostResponseDto,
   })
   @ApiBody({ type: CreatePostDto })
   @SecurityDecorator()

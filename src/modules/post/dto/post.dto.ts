@@ -1,5 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger/dist/decorators';
-import { IsNotEmpty, IsString, IsArray } from 'class-validator';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+} from '@nestjs/swagger/dist/decorators';
+import { IsNotEmpty, IsString, IsArray, IsOptional } from 'class-validator';
 
 export class CreatePostDto {
   @ApiProperty({ type: String })
@@ -17,8 +20,8 @@ export class CreatePostDto {
   @IsArray()
   photoUrl: string[];
 
-  @ApiProperty({ type: Array })
-  @IsNotEmpty()
+  @ApiPropertyOptional({ type: Array })
+  @IsOptional()
   @IsArray()
-  categoriesId: string[];
+  categoriesId?: string[];
 }

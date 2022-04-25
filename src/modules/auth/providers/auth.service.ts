@@ -56,10 +56,12 @@ export class AuthService {
       });
       return {
         id: account._id,
-        access_token,
-        expires_in: new Date(
-          Date.now() + parseInt(process.env.TOKEN_EXPIRE_TIME),
-        ),
+        token: {
+          access_token,
+          expires_in: new Date(
+            Date.now() + parseInt(process.env.TOKEN_EXPIRE_TIME),
+          ),
+        },
       };
     }
     throw new ForbiddenException('invalid password');
