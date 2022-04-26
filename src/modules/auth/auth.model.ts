@@ -3,6 +3,8 @@ import { BaseDocument } from 'src/shared/mongoose/base.document';
 import { IamNamespace } from 'src/shared/types';
 import { DefaultSchemaOptions } from 'src/shared/mongoose/schema-option';
 
+const defaultPhotoUrl = process.env.DEFAULT_PROFILE_PHOTO;
+
 @Schema(DefaultSchemaOptions)
 export class AuthDocument extends BaseDocument {
   @Prop({ required: true, unique: true })
@@ -17,14 +19,14 @@ export class AuthDocument extends BaseDocument {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ default: null, nullable: true })
-  access_token: string;
-
   @Prop({ default: true, required: true })
   active: boolean;
 
   @Prop({ default: false, required: true })
   verify: boolean;
+
+  @Prop({ default: defaultPhotoUrl, required: true })
+  photoUrl: string;
 
   @Prop({ default: new Date(), required: true })
   passwordChanged: Date;

@@ -21,6 +21,11 @@ export class AccountResponseDto {
 
   @ApiProperty({ type: String })
   @IsNotEmpty()
+  @IsEmail()
+  photoUrl: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
   @IsString()
   firstName: string;
 

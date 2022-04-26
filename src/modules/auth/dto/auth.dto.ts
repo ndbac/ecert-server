@@ -56,6 +56,11 @@ export class CreateAccountDto {
   @IsOptional()
   @IsBoolean()
   active: boolean;
+
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
+  photoUrl: string;
 }
 
 export class UserDataDto {

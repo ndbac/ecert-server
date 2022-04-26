@@ -28,6 +28,7 @@ export class AuthService {
       ...data,
       password: await this.hashingSrv.hash(data.password),
       active: data.active || true,
+      photoUrl: data.photoUrl || process.env.DEFAULT_PROFILE_PHOTO,
     };
     const createdAccount = await this.authRepo.create(account);
     return {
@@ -36,6 +37,7 @@ export class AuthService {
       firstName: createdAccount.firstName,
       lastName: createdAccount.lastName,
       createdAt: createdAccount.createdAt,
+      photoUrl: createdAccount.photoUrl,
     };
   }
 
@@ -48,12 +50,6 @@ export class AuthService {
         namespace: account.namespace,
       };
       const access_token = this.jwtService.generateToken(data);
-      const encryptedAccessToken = await this.cryptoService.encryptText(
-        access_token,
-      );
-      await this.authRepo.updateById(account._id, {
-        access_token: encryptedAccessToken,
-      });
       return {
         id: account._id,
         token: {
