@@ -3,6 +3,7 @@ import {
   Post,
   Body,
   Put,
+  Delete,
   Param,
   HttpCode,
   HttpStatus,
@@ -72,5 +73,25 @@ export class CommentController {
       ...commentData,
       commentId,
     });
+  }
+
+  @ApiOperation({
+    operationId: 'deleteComment',
+    summary: 'user delete a comment',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'comment deleted successfully',
+    type: CommentResponseDto,
+  })
+  @ApiParam({ name: 'commentId' })
+  @SecurityDecorator()
+  @Delete('/delete/:commentId')
+  async deleteComment(
+    @User('') userData: TokenDetailsDto,
+    @Param('commentId') commentId: string,
+  ) {
+    return await this.commentSrv.deleteComment(userData, commentId);
   }
 }

@@ -51,4 +51,16 @@ export class CommentService {
       text: commentData.text,
     });
   }
+
+  async deleteComment(tokenDetails: TokenDetailsDto, commentId: string) {
+    const comment = await this.commentRepo.findByIdOrFail(commentId);
+    if (
+      comment.userId !== tokenDetails.user.userId &&
+      tokenDetails.user.namespace !== IamNamespace.ADMIN
+    ) {
+      throw new ForbiddenException('permission is required');
+    }
+    await this.commentRepo.deleteById(commentId);
+    return { status: 'comment deleted', commentId };
+  }
 }
