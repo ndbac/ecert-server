@@ -3,8 +3,10 @@ import {
   Post,
   Body,
   Put,
+  Get,
   Delete,
   Param,
+  Query,
   HttpCode,
   HttpStatus,
   UsePipes,
@@ -20,8 +22,12 @@ import {
 import { SecurityDecorator } from 'src/decorators/security-input.decorator';
 import { User } from 'src/decorators/user.decorator';
 import { TokenDetailsDto } from 'src/shared/user.dto';
-import { CommentService } from '../providers/comment.service';
-import { CreateCommentDto, UpdateCommentBodyDto } from '../dto/comment.dto';
+import { CommentService } from '../providers/comment-user.service';
+import {
+  CreateCommentDto,
+  UpdateCommentBodyDto,
+  SearchCommentDto,
+} from '../dto/comment-user.dto';
 import { CommentResponseDto } from '../dto/comment-response.dto';
 
 @Controller('user/comment')
@@ -93,5 +99,20 @@ export class CommentController {
     @Param('commentId') commentId: string,
   ) {
     return await this.commentSrv.deleteComment(userData, commentId);
+  }
+
+  @ApiOperation({
+    operationId: 'readAllComments',
+    summary: 'user read all comments with filters',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'list of comments',
+    type: CommentResponseDto,
+  })
+  @Get('')
+  async readAllComment(@Query() query: SearchCommentDto) {
+    return await this.commentSrv.readAllComment(query);
   }
 }

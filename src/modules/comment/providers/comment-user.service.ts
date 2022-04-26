@@ -4,7 +4,11 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { CommentRepository } from '../comment.repository';
-import { CreateCommentDto, UpdateCommentDto } from '../dto/comment.dto';
+import {
+  CreateCommentDto,
+  UpdateCommentDto,
+  SearchCommentDto,
+} from '../dto/comment-user.dto';
 import { TokenDetailsDto } from 'src/shared/user.dto';
 import { PostRepository } from '../../post/post.repository';
 import { IamNamespace } from 'src/shared/types';
@@ -62,5 +66,23 @@ export class CommentService {
     }
     await this.commentRepo.deleteById(commentId);
     return { status: 'comment deleted', commentId };
+  }
+
+  async readAllComment(query: SearchCommentDto) {
+    const page = parseInt(query.page) || 1;
+    const limit =
+      parseInt(query.limit) || parseInt(process.env.DEFAULT_PAGE_SIZE);
+    const skip = (page - 1) * limit;
+    let sort: object;
+    if (query.sort && query.sort.toString() === 'true') {
+      sort = { createdAt: 1 };
+    } else {
+      sort = { createdAt: -1 };
+    }
+    const searchCdt = {} as any;
+    if (query.parentId !== undefined && query.parentId !== null) {
+      searchCdt.parentId = query.parentId;
+    }
+    return await this.commentRepo.find(searchCdt, { limit, skip, sort });
   }
 }

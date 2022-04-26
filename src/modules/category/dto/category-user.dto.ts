@@ -22,7 +22,9 @@ export class SearchCategoryDto {
   @IsString()
   sort: boolean;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'id of the post/comment that it replies',
+  })
   @IsOptional()
   @IsString()
   userId: string;

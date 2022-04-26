@@ -29,3 +29,25 @@ export class UpdateCommentDto extends UpdateCommentBodyDto {
   @IsString()
   commentId: string;
 }
+
+export class SearchCommentDto {
+  @ApiPropertyOptional({ description: 'if true then sort by created time' })
+  @IsOptional()
+  @IsString()
+  sort: boolean;
+
+  @ApiPropertyOptional({ description: 'number of page' })
+  @IsOptional()
+  @IsString()
+  page: string;
+
+  @ApiPropertyOptional({ description: 'post limit per page' })
+  @IsOptional()
+  @IsString()
+  limit: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  parentId: string;
+}

@@ -3,8 +3,8 @@ import { CommonModule } from '../common/common.module';
 import { CommentCoreModule } from './comment.core.module';
 import { UserMiddleware } from 'src/middlewares/user.middleware';
 import { AuthCoreModule } from '../auth/auth.core.module';
-import { CommentController } from './controllers/comment.controller';
-import { CommentService } from './providers/comment.service';
+import { CommentController } from './controllers/comment-user.controller';
+import { CommentService } from './providers/comment-user.service';
 import { PostCoreModule } from '../post/post.core.module';
 
 @Module({
