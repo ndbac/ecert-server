@@ -7,6 +7,7 @@ import { CommonModule } from './common/common.module';
 import { VerifyModule } from './verify/verify.module';
 import { NotificationModule } from './notification/notification.module';
 import { PostModule } from './post/post.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PostModule } from './post/post.module';
     VerifyModule,
     NotificationModule,
     PostModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}

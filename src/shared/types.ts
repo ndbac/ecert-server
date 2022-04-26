@@ -3,6 +3,7 @@ export enum CollectionName {
   VERIFICATION = 'verification',
   NOTIFICATION = 'notification',
   POST = 'post',
+  CATEGORY = 'category',
 }
 
 export enum IamNamespace {

@@ -238,6 +238,15 @@ export class BaseRepository<T extends Document> {
     }
   }
 
+  async exists(conditions: FilterQuery<T>): Promise<boolean> {
+    return this.model.exists(conditions);
+  }
+
+  async existsById(id: any): Promise<boolean> {
+    if (!isObjectId(id)) return false;
+    return this.exists({ _id: id });
+  }
+
   throwErrorNotFound(): never {
     throw new NotFoundException();
   }
