@@ -1,8 +1,13 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { CommentRepository } from '../comment.repository';
-import { CreateCommentDto } from '../dto/comment.dto';
+import { CreateCommentDto, UpdateCommentDto } from '../dto/comment.dto';
 import { TokenDetailsDto } from 'src/shared/user.dto';
 import { PostRepository } from '../../post/post.repository';
+import { IamNamespace } from 'src/shared/types';
 
 @Injectable()
 export class CommentService {
@@ -27,5 +32,23 @@ export class CommentService {
       user: { userId },
     } = tokenDetails;
     return await this.commentRepo.create({ ...commentData, userId });
+  }
+
+  async updateComment(
+    tokenDetails: TokenDetailsDto,
+    commentData: UpdateCommentDto,
+  ) {
+    const comment = await this.commentRepo.findByIdOrFail(
+      commentData.commentId,
+    );
+    if (
+      comment.userId !== tokenDetails.user.userId &&
+      tokenDetails.user.namespace !== IamNamespace.ADMIN
+    ) {
+      throw new ForbiddenException('permission is required');
+    }
+    return await this.commentRepo.updateById(commentData.commentId, {
+      text: commentData.text,
+    });
   }
 }

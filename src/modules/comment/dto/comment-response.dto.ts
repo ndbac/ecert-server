@@ -1,8 +1,5 @@
-import {
-  ApiProperty,
-  ApiPropertyOptional,
-} from '@nestjs/swagger/dist/decorators';
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger/dist/decorators';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { BaseResponseDto } from 'src/shared/base.dto';
 
 export class CommentResponseDto extends BaseResponseDto {
@@ -16,8 +13,8 @@ export class CommentResponseDto extends BaseResponseDto {
   @IsString()
   text: string;
 
-  @ApiPropertyOptional({ type: String })
-  @IsOptional()
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
   @IsString()
   parentId: string;
 }

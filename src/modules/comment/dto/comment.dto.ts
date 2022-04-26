@@ -15,3 +15,17 @@ export class CreateCommentDto {
   @IsString()
   parentId: string;
 }
+
+export class UpdateCommentBodyDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  text: string;
+}
+
+export class UpdateCommentDto extends UpdateCommentBodyDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  commentId: string;
+}
