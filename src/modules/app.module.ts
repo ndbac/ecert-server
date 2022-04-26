@@ -8,6 +8,7 @@ import { VerifyModule } from './verify/verify.module';
 import { NotificationModule } from './notification/notification.module';
 import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CategoryModule } from './category/category.module';
     NotificationModule,
     PostModule,
     CategoryModule,
+    CommentModule,
   ],
 })
 export class AppModule {}

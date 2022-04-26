@@ -5,7 +5,7 @@ import { UserMiddleware } from 'src/middlewares/user.middleware';
 import { AuthCoreModule } from '../auth/auth.core.module';
 import { CategoryService } from './providers/category.service';
 import { CategoryController } from './controllers/category.controller';
-import { CategoryUserController } from './controllers/category-user.controllers';
+import { CategoryUserController } from './controllers/category-user.controller';
 import { CategoryUserService } from './providers/category-user.service';
 
 @Module({
