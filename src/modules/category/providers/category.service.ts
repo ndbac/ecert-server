@@ -51,4 +51,14 @@ export class CategoryService {
     };
     return await this.categoryRepo.updateById(input.categoryId, newCategory);
   }
+
+  async incCategoryPostCnt(categoryId: string) {
+    await this.categoryRepo.findByIdOrFail(categoryId);
+    await this.categoryRepo.updateById(categoryId, { $inc: { postCount: 1 } });
+  }
+
+  async decCategoryPostCnt(categoryId: string) {
+    await this.categoryRepo.findByIdOrFail(categoryId);
+    await this.categoryRepo.updateById(categoryId, { $inc: { postCount: -1 } });
+  }
 }

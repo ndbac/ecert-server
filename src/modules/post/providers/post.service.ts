@@ -8,10 +8,14 @@ import { TokenDetailsDto } from 'src/shared/user.dto';
 import { CreatePostDto, UpdatePostDto, DeletePostsDto } from '../dto/post.dto';
 import { IamNamespace } from 'src/shared/types';
 import { makeSlug } from 'src/shared/helpers';
+import { CategoryService } from '../../category/providers/category.service';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly postRepo: PostRepository) {}
+  constructor(
+    private readonly postRepo: PostRepository,
+    private readonly categorySrv: CategoryService,
+  ) {}
 
   async createPost(tokenData: TokenDetailsDto, postData: CreatePostDto) {
     const slug = makeSlug(postData.title);
@@ -23,7 +27,9 @@ export class PostService {
       categoryId: postData.categoryId,
       slug,
     };
-    return await this.postRepo.create(post);
+    const data = await this.postRepo.create(post);
+    await this.categorySrv.incCategoryPostCnt(postData.categoryId);
+    return data;
   }
 
   async updatePost(tokenData: TokenDetailsDto, postData: UpdatePostDto) {
@@ -59,7 +65,8 @@ export class PostService {
     await Promise.all(checkingValidID);
 
     const promises = input.postIdList.map(async (e) => {
-      await this.postRepo.deleteById(e);
+      const deletedPost = await this.postRepo.deleteById(e);
+      await this.categorySrv.decCategoryPostCnt(deletedPost.categoryId);
     });
     await Promise.all(promises);
     return {

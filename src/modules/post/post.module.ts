@@ -7,10 +7,12 @@ import { AuthCoreModule } from '../auth/auth.core.module';
 import { PostService } from './providers/post.service';
 import { PostUserService } from './providers/post-user.service';
 import { PostUserController } from './controllers/post-user.controller';
+import { CategoryCoreModule } from '../category/category.core.module';
+import { CategoryService } from '../category/providers/category.service';
 
 @Module({
-  imports: [PostCoreModule, CommonModule, AuthCoreModule],
-  providers: [PostService, PostUserService],
+  imports: [PostCoreModule, CommonModule, AuthCoreModule, CategoryCoreModule],
+  providers: [PostService, PostUserService, CategoryService],
   controllers: [PostController, PostUserController],
 })
 export class PostModule implements NestModule {

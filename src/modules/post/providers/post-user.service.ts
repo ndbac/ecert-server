@@ -36,7 +36,8 @@ export class PostUserService {
   }
 
   async readPostById(postId: string) {
-    return await this.postRepo.findById(postId);
+    await this.postRepo.findByIdOrFail(postId);
+    return await this.postRepo.updateById(postId, { $inc: { viewCount: 1 } });
   }
 
   async readRandomPosts(input: string) {
