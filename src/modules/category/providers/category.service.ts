@@ -25,6 +25,7 @@ export class CategoryService {
       name: input.name,
       userId: tokenDetails.user.userId,
       slug: slugify(input.name, { locale: 'vi' }),
+      photoUrl: input.photoUrl,
     };
     return await this.categoryRepo.create(category);
   }
@@ -43,8 +44,10 @@ export class CategoryService {
       );
     }
     const newCategory = {
-      name: input.name,
-      slug: slugify(input.name, { locale: 'vi' }),
+      name: input.name || category.name,
+      slug:
+        (input.name && slugify(input.name, { locale: 'vi' })) || category.slug,
+      photoUrl: input.photoUrl || category.photoUrl,
     };
     return await this.categoryRepo.updateById(input.categoryId, newCategory);
   }

@@ -16,6 +16,11 @@ export class CategoryResponseDto extends BaseResponseDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
+  photoUrl: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
   userId: string;
 
   @ApiProperty({ type: String })

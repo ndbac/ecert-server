@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger/dist/decorators';
 import { IsString, IsOptional } from 'class-validator';
 
-export class SearchPostDto {
+export class SearchCategoryDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
@@ -21,11 +21,6 @@ export class SearchPostDto {
   @IsOptional()
   @IsString()
   sort: boolean;
-
-  @ApiPropertyOptional({ description: 'category of post' })
-  @IsOptional()
-  @IsString()
-  categoryId: string;
 
   @ApiPropertyOptional()
   @IsOptional()

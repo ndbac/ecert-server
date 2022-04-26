@@ -23,7 +23,7 @@ import { TokenDetailsDto } from 'src/shared/user.dto';
 import { CreatePostDto, DeletePostsDto } from '../dto/post.dto';
 import { PostResponseDto, DeletePostsResDto } from '../dto/post-response.dto';
 
-@Controller('post')
+@Controller('creator/post')
 @ApiTags('creator.post')
 @UsePipes(ValidationPipe)
 export class PostController {

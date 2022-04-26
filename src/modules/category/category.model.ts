@@ -10,6 +10,9 @@ export class CategoryDocument extends EmbeddedDocument {
   @Prop({ required: true })
   name: string;
 
+  @Prop({ required: true })
+  photoUrl: string;
+
   @Prop({ default: 0, required: true })
   postCount: number;
 

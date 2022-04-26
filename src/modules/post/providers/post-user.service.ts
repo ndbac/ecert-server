@@ -19,7 +19,6 @@ export class PostUserService {
       sort = { createdAt: -1 };
     }
     const searchOptions = buildRegexSearchOptions(query.searchText, 'title');
-    console.log(searchOptions);
     const searchCdt = {} as any;
     if (query.userId !== undefined && query.userId !== null) {
       searchCdt.userId = query.userId;
