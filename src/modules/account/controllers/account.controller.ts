@@ -42,7 +42,7 @@ export class AccountController {
     }),
   )
   @SecurityDecorator()
-  @Put('')
+  @Put('/profile-photo')
   async uploadProfilePhoto(
     @User('') userData: TokenDetailsDto,
     @UploadedFile() file: Express.Multer.File,
