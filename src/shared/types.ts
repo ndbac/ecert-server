@@ -5,6 +5,7 @@ export enum CollectionName {
   POST = 'post',
   CATEGORY = 'category',
   COMMENT = 'comment',
+  ACCURACY = 'accuracy',
 }
 
 export enum IamNamespace {

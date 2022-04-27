@@ -10,6 +10,7 @@ import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
 import { CommentModule } from './comment/comment.module';
 import { AccountModule } from './account/account.module';
+import { AccuracyModule } from './accuracy/accuracy.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AccountModule } from './account/account.module';
     CategoryModule,
     CommentModule,
     AccountModule,
+    AccuracyModule,
   ],
 })
 export class AppModule {}
