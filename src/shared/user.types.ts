@@ -5,3 +5,5 @@ export interface IIamUserData {
   userId: string;
   email: string;
 }
+
+export const DefaultProfilePhotoSize = 800;

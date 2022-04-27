@@ -20,3 +20,9 @@ export enum IamPhotoType {
   JPEG = 'jpeg',
   GIF = 'gif',
 }
+
+export enum IMediaLocalPath {
+  PROFILE_PICTURE = 'images/profile',
+  POST_PHOTO = 'images/post',
+  ATTACHMENT = 'attachment',
+}

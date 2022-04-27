@@ -1,7 +1,6 @@
 import {
   Controller,
   Put,
-  Query,
   HttpCode,
   HttpStatus,
   UsePipes,
@@ -19,8 +18,7 @@ import { SecurityDecorator } from 'src/decorators/security-input.decorator';
 import { User } from 'src/decorators/user.decorator';
 import { TokenDetailsDto } from 'src/shared/user.dto';
 import { AccountService } from '../providers/account.service';
-import { imageFileFilter } from 'src/shared/helpers';
-import { UploadPhotoDto } from '../dto/account.dto';
+import { imageFileFilter } from 'src/shared/media/uploadMedia.helpers';
 
 @Controller('account')
 @ApiTags('user.account')
@@ -45,11 +43,10 @@ export class AccountController {
   )
   @SecurityDecorator()
   @Put('')
-  async createComment(
+  async uploadProfilePhoto(
     @User('') userData: TokenDetailsDto,
     @UploadedFile() file: Express.Multer.File,
-    @Query() input: UploadPhotoDto,
   ) {
-    return await this.accountSrv.updateProfilePhoto(userData, file, input);
+    return await this.accountSrv.updateProfilePhoto(userData, file);
   }
 }

@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { AuthRepository } from '../../auth/auth.repository';
 import { TokenDetailsDto } from 'src/shared/user.dto';
-import { imageTransformWithAutoHeight } from 'src/shared/helpers';
-import { UploadPhotoDto } from '../dto/account.dto';
-import * as fs from 'fs';
-import { cloudinaryUploadImg } from '../../adapters/cloudinary/cloudinary.config';
+import { uploadImgToCloud } from 'src/shared/media/uploadMedia.helpers';
+import { IMediaLocalPath, IamPhotoType } from 'src/shared/types';
+import { DefaultProfilePhotoSize } from 'src/shared/user.types';
 
 @Injectable()
 export class AccountService {
@@ -13,29 +12,21 @@ export class AccountService {
   async updateProfilePhoto(
     tokenDetails: TokenDetailsDto,
     file: Express.Multer.File,
-    imgConfig: UploadPhotoDto,
   ) {
     const account = await this.authRepo.findByIdOrFail(
       tokenDetails.user.userId,
     );
-
-    await imageTransformWithAutoHeight(
+    const photoUrl = await uploadImgToCloud(
       file,
-      parseInt(imgConfig.width),
-      imgConfig.extension,
+      DefaultProfilePhotoSize,
+      IamPhotoType.JPG,
       tokenDetails.user.userId,
+      IMediaLocalPath.PROFILE_PICTURE,
     );
-
-    const localPath = `public/images/profile/${file.filename}`;
-    const imgUploaded = await cloudinaryUploadImg(localPath);
-
-    fs.unlinkSync(localPath);
-
-    await this.authRepo.updateById(account._id, { photoUrl: imgUploaded.url });
-
+    await this.authRepo.updateById(account._id, { photoUrl });
     return {
       status: 'photo uploaded successfully',
-      url: imgUploaded.url,
+      url: photoUrl,
     };
   }
 }
