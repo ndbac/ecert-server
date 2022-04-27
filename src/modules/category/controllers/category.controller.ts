@@ -3,6 +3,7 @@ import {
   Post,
   Body,
   Put,
+  Delete,
   Param,
   HttpCode,
   HttpStatus,
@@ -72,5 +73,24 @@ export class CategoryController {
       ...categoryData,
       categoryId,
     });
+  }
+
+  @ApiOperation({
+    operationId: 'deleteCategory',
+    summary: 'creator delete a category',
+  })
+  @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'category deleted successfully',
+  })
+  @ApiParam({ name: 'categoryId' })
+  @SecurityDecorator()
+  @Delete('/:categoryId')
+  async deleteCategory(
+    @User('') userData: TokenDetailsDto,
+    @Param('categoryId') categoryId: string,
+  ) {
+    return await this.categorySvc.deleteCategory(userData, categoryId);
   }
 }

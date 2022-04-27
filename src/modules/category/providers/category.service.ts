@@ -52,6 +52,22 @@ export class CategoryService {
     return await this.categoryRepo.updateById(input.categoryId, newCategory);
   }
 
+  async deleteCategory(tokenDetails: TokenDetailsDto, cateGoryId: string) {
+    const category = await this.categoryRepo.findByIdOrFail(cateGoryId);
+    if (
+      category.userId !== tokenDetails.user.userId &&
+      tokenDetails.user.namespace !== IamNamespace.ADMIN
+    ) {
+      throw new ForbiddenException(
+        'do not have permission to update this category',
+      );
+    }
+    await this.categoryRepo.deleteById(cateGoryId);
+    return {
+      status: `category with id=${cateGoryId} deleted successfully`,
+    };
+  }
+
   async incCategoryPostCnt(categoryId: string) {
     await this.categoryRepo.findByIdOrFail(categoryId);
     await this.categoryRepo.updateById(categoryId, { $inc: { postCount: 1 } });
