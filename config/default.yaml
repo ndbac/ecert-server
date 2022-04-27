@@ -1,0 +1,9 @@
+service:
+  name: ThisIsBac APIs Documentation
+  description: API specification for ThisIsBac blog || baseUrl="/api/v1"
+  apiVersion: 0.1.0
+  docsBaseUrl: /docs/api
+  baseUrl: /api/v1
+
+server:
+  keepAlive: 80000

@@ -1,11 +1,16 @@
 import { INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as config from 'config';
 
 export function initializeSwaggerDoc(app: INestApplication) {
-  const config = new DocumentBuilder()
-    .setTitle('ThisIsBac APIs Documentation')
-    .setDescription('API specification for ThisIsBac blog')
-    .setVersion(process.env.API_VERSION)
+  const options = new DocumentBuilder()
+    .setTitle(config.get<string>('service.name'))
+    .setDescription(config.get<string>('service.description'))
+    .setVersion(config.get<string>('service.apiVersion'))
+    .addServer(`http://localhost:3000${config.get('service.baseUrl')}`)
+    .addServer(
+      `https://thisisbac.herokuapp.com${config.get('service.baseUrl')}`,
+    )
     .addSecurity('x-zp-auth-provider', {
       type: 'apiKey',
       name: 'x-zp-auth-provider',
@@ -14,12 +19,14 @@ export function initializeSwaggerDoc(app: INestApplication) {
     })
     .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, options, {
+    ignoreGlobalPrefix: true,
+  });
   SwaggerModule.setup('docs/api', app, document, {
     swaggerOptions: {
       displayOperationId: true,
       persistAuthorization: true,
     },
-    customSiteTitle: 'ThisIsBac Blog APIs',
+    customSiteTitle: config.get<string>('service.name'),
   });
 }
