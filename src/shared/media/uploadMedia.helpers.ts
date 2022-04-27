@@ -28,9 +28,9 @@ export const imageTransformWithAutoHeight = async (
   await sharp(file.buffer)
     .resize({ fit: sharp.fit.contain, width })
     .toFormat(extension)
-    .toFile(path.join(`public/${pathDestination}/${file.filename}`));
+    .toFile(path.join(`src/public/${pathDestination}/${file.filename}`));
 
-  return `public/${pathDestination}/${file.filename}`;
+  return `src/public/${pathDestination}/${file.filename}`;
 };
 
 export const uploadImgToCloud = async (
