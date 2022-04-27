@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { AuthRepository } from '../../auth/auth.repository';
 import { TokenDetailsDto } from 'src/shared/user.dto';
-import * as sharp from 'sharp';
-import * as path from 'path';
+import { imageTransformWithAutoHeight } from 'src/shared/helpers';
+import { UploadPhotoDto } from '../dto/account.dto';
 import * as fs from 'fs';
 import { cloudinaryUploadImg } from '../../adapters/cloudinary/cloudinary.config';
 
@@ -13,19 +13,18 @@ export class AccountService {
   async updateProfilePhoto(
     tokenDetails: TokenDetailsDto,
     file: Express.Multer.File,
+    imgConfig: UploadPhotoDto,
   ) {
     const account = await this.authRepo.findByIdOrFail(
       tokenDetails.user.userId,
     );
-    file.filename = `user-photo-${tokenDetails.user.userId}-${Date.now()}-${
-      file.originalname
-    }`;
 
-    await sharp(file.buffer)
-      .resize(400, 400)
-      .toFormat('jpeg')
-      .jpeg({ quality: 90 })
-      .toFile(path.join(`public/images/profile/${file.filename}`));
+    await imageTransformWithAutoHeight(
+      file,
+      parseInt(imgConfig.width),
+      imgConfig.extension,
+      tokenDetails.user.userId,
+    );
 
     const localPath = `public/images/profile/${file.filename}`;
     const imgUploaded = await cloudinaryUploadImg(localPath);

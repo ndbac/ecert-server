@@ -13,3 +13,10 @@ export enum IamNamespace {
   USER = 'user',
   GUEST = 'guest',
 }
+
+export enum IamPhotoType {
+  PNG = 'png',
+  JPG = 'jpg',
+  JPEG = 'jpeg',
+  GIF = 'gif',
+}
