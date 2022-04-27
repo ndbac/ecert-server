@@ -13,6 +13,10 @@ async function bootstrap() {
 
   app.setGlobalPrefix(APP_BASE_URL);
 
+  app.enableCors({
+    exposedHeaders: config.get<string>('server.cors.exposedHeaders'),
+  });
+
   initializeSwaggerDoc(app);
 
   app.useGlobalFilters(new GeneralExceptionFilter());

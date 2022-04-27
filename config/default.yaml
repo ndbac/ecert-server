@@ -7,3 +7,6 @@ service:
 
 server:
   keepAlive: 80000
+  cors:
+    allowedHeaders: 'authorization,content-type'
+    exposedHeaders: 'authorization,x-response-time,x-request-id, x-pagination-page, x-pagination-page-size, x-pagination-total'
