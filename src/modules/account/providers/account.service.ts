@@ -37,6 +37,10 @@ export class AccountService {
     data: SoftUpdateAccountDto,
   ) {
     await this.authRepo.findByIdOrFail(tokenDetails.user.userId);
-    return await this.authRepo.updateById(tokenDetails.user.userId, data);
+    const account = await this.authRepo.updateById(
+      tokenDetails.user.userId,
+      data,
+    );
+    return { ...data, userId: account._id };
   }
 }

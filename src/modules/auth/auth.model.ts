@@ -16,7 +16,7 @@ export class AuthDocument extends BaseDocument {
   @Prop({ required: true })
   lastName: string;
 
-  @Prop({ required: true, select: false })
+  @Prop({ required: true })
   password: string;
 
   @Prop({ default: null, nullable: true })
@@ -31,7 +31,7 @@ export class AuthDocument extends BaseDocument {
   @Prop({ default: defaultPhotoUrl, required: true })
   photoUrl: string;
 
-  @Prop({ default: new Date(), required: true, select: false })
+  @Prop({ default: new Date(), required: true })
   passwordChanged: Date;
 
   @Prop({ default: IamNamespace.USER, required: true })
