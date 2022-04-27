@@ -11,7 +11,6 @@ cloudinary.v2.config({
 
 export const cloudinaryUploadImg = async (path: string) => {
   try {
-    console.log(path);
     const data = await cloudinary.v2.uploader.upload(path, {
       resource_type: 'raw',
       use_filename: true,

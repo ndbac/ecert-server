@@ -25,4 +25,5 @@ export enum IMediaLocalPath {
   PROFILE_PICTURE = 'images/profile',
   POST_PHOTO = 'images/post',
   ATTACHMENT = 'attachment',
+  QR_CODE = 'images/qrcode',
 }
