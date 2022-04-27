@@ -6,9 +6,10 @@ import { JwtService } from './jwt/jwt.service';
 import { CryptoModule } from './crypto/crypto.module';
 import { CryptoService } from './crypto/crypto.service';
 import { QrCodeModule } from './qrcode/qrcode.module';
+import { JimpModule } from './jimp/jimp.module';
 
 @Module({
-  imports: [HashingModule, JwtModule, CryptoModule, QrCodeModule],
+  imports: [HashingModule, JwtModule, CryptoModule, QrCodeModule, JimpModule],
   providers: [HashingService, JwtService, CryptoService],
   exports: [HashingService, JwtService, CryptoService],
 })

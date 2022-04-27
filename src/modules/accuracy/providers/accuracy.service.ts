@@ -4,6 +4,7 @@ import { QRCodeService } from 'src/modules/common/qrcode/qrcode.provider';
 import { TokenDetailsDto } from 'src/shared/user.dto';
 import { AccuracyInputDto } from '../dto/accuracy.dto';
 import { CryptoService } from 'src/modules/common/crypto/crypto.service';
+import { JimpService } from 'src/modules/common/jimp/jimp.provider';
 
 @Injectable()
 export class AccuracyService {
@@ -11,6 +12,7 @@ export class AccuracyService {
     private readonly accuracyRepo: AccuracyRepository,
     private readonly qrcodeService: QRCodeService,
     private readonly cryptoSrv: CryptoService,
+    private readonly jimpSrv: JimpService,
   ) {}
 
   async dataAccuracy(tokenDetails: TokenDetailsDto, input: AccuracyInputDto) {

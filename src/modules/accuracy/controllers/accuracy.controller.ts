@@ -38,7 +38,7 @@ export class AccuracyController {
   @ApiBody({ type: AccuracyInputDto })
   @SecurityDecorator()
   @Post('')
-  async createVerifyAccountToken(
+  async dataAccuracy(
     @User('') userData: TokenDetailsDto,
     @Body() input: AccuracyInputDto,
   ) {

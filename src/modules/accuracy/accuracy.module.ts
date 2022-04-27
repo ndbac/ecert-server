@@ -7,10 +7,11 @@ import { AuthCoreModule } from '../auth/auth.core.module';
 import { UserMiddleware } from 'src/middlewares/user.middleware';
 import { QRCodeService } from 'src/modules/common/qrcode/qrcode.provider';
 import { CryptoService } from 'src/modules/common/crypto/crypto.service';
+import { JimpService } from 'src/modules/common/jimp/jimp.provider';
 
 @Module({
   imports: [AccuracyCoreModule, CommonModule, AuthCoreModule],
-  providers: [AccuracyService, QRCodeService, CryptoService],
+  providers: [AccuracyService, QRCodeService, CryptoService, JimpService],
   controllers: [AccuracyController],
 })
 export class AccuracyModule implements NestModule {
