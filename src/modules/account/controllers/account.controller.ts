@@ -7,10 +7,13 @@ import {
   ValidationPipe,
   UseInterceptors,
   UploadedFile,
+  ClassSerializerInterceptor,
+  Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiTags,
+  ApiBody,
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
@@ -19,6 +22,10 @@ import { User } from 'src/decorators/user.decorator';
 import { TokenDetailsDto } from 'src/shared/user.dto';
 import { AccountService } from '../providers/account.service';
 import { imageFileFilter } from 'src/shared/media/uploadMedia.helpers';
+import {
+  UploadPhotoResponseDto,
+  SoftUpdateAccountDto,
+} from '../dto/account.dto';
 
 @Controller('account')
 @ApiTags('user.account')
@@ -34,6 +41,7 @@ export class AccountController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'photo uploaded successfully',
+    type: UploadPhotoResponseDto,
   })
   @UseInterceptors(
     FileInterceptor('image', {
@@ -48,5 +56,24 @@ export class AccountController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     return await this.accountSrv.updateProfilePhoto(userData, file);
+  }
+
+  @ApiOperation({
+    operationId: 'softUpdateAccount',
+    summary: 'user update name, bio',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'account updated successfully',
+  })
+  @ApiBody({ type: SoftUpdateAccountDto })
+  @SecurityDecorator()
+  @Put('')
+  async softUpdateAccount(
+    @User('') userData: TokenDetailsDto,
+    @Body('') input: SoftUpdateAccountDto,
+  ) {
+    return await this.accountSrv.profileSoftUpdate(userData, input);
   }
 }

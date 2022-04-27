@@ -16,8 +16,11 @@ export class AuthDocument extends BaseDocument {
   @Prop({ required: true })
   lastName: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, select: false })
   password: string;
+
+  @Prop({ default: null, nullable: true })
+  bio: string;
 
   @Prop({ default: true, required: true })
   active: boolean;

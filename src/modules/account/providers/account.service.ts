@@ -4,6 +4,7 @@ import { TokenDetailsDto } from 'src/shared/user.dto';
 import { uploadImgToCloud } from 'src/shared/media/uploadMedia.helpers';
 import { IMediaLocalPath, IamPhotoType } from 'src/shared/types';
 import { DefaultProfilePhotoSize } from 'src/shared/user.types';
+import { SoftUpdateAccountDto } from '../dto/account.dto';
 
 @Injectable()
 export class AccountService {
@@ -27,6 +28,15 @@ export class AccountService {
     return {
       status: 'photo uploaded successfully',
       url: photoUrl,
+      userId: account._id,
     };
+  }
+
+  async profileSoftUpdate(
+    tokenDetails: TokenDetailsDto,
+    data: SoftUpdateAccountDto,
+  ) {
+    await this.authRepo.findByIdOrFail(tokenDetails.user.userId);
+    return await this.authRepo.updateById(tokenDetails.user.userId, data);
   }
 }

@@ -1,15 +1,39 @@
-import { ApiProperty } from '@nestjs/swagger/dist/decorators';
-import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
-import { IamPhotoType } from 'src/shared/types';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+} from '@nestjs/swagger/dist/decorators';
+import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
 
-export class UploadPhotoDto {
+export class UploadPhotoResponseDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
-  width: string;
+  status: string;
 
-  @ApiProperty({ enum: IamPhotoType })
+  @ApiProperty({ type: String })
   @IsNotEmpty()
-  @IsEnum(IamPhotoType)
-  extension: IamPhotoType;
+  @IsString()
+  url: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+}
+
+export class SoftUpdateAccountDto {
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
+  firstName?: string;
+
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
+  lastName?: string;
+
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
+  bio?: string;
 }

@@ -11,7 +11,6 @@ import {
 } from '../dto/auth.dto';
 import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
-import { CryptoService } from '../../common/crypto/crypto.service';
 import { TokenDetailsDto } from 'src/shared/user.dto';
 
 @Injectable()
@@ -20,7 +19,6 @@ export class AuthService {
     private readonly authRepo: AuthRepository,
     private readonly hashingSrv: HashingService,
     private readonly jwtService: JwtService,
-    private readonly cryptoService: CryptoService,
   ) {}
 
   async register(data: CreateAccountDto) {
@@ -29,11 +27,13 @@ export class AuthService {
       password: await this.hashingSrv.hash(data.password),
       active: data.active || true,
       photoUrl: data.photoUrl || process.env.DEFAULT_PROFILE_PHOTO,
+      bio: data?.bio || null,
     };
     const createdAccount = await this.authRepo.create(account);
     return {
       userId: createdAccount._id,
       email: createdAccount.email,
+      bio: createdAccount.bio,
       firstName: createdAccount.firstName,
       lastName: createdAccount.lastName,
       createdAt: createdAccount.createdAt,

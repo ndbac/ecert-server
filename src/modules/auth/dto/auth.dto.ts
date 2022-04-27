@@ -60,6 +60,11 @@ export class CreateAccountDto {
   @ApiPropertyOptional({ type: String })
   @IsOptional()
   @IsString()
+  bio?: string;
+
+  @ApiPropertyOptional({ type: String })
+  @IsOptional()
+  @IsString()
   photoUrl: string;
 }
 
