@@ -28,4 +28,7 @@ export enum IMediaLocalPath {
   ATTACHMENT = 'attachment',
   QR_CODE = 'images/qrcode',
   ACCURACY = 'images/accuracy',
+  TEXT_ADDED_PHOTO = 'images/textAddedPhoto',
+  QR_ADDED_PHOTO = 'images/qrAddedPhoto',
+  PHOTO = 'images/photo',
 }

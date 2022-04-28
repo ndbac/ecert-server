@@ -10,3 +10,12 @@ server:
   cors:
     allowedHeaders: 'authorization,content-type'
     exposedHeaders: 'authorization,x-response-time,x-request-id, x-pagination-page, x-pagination-page-size, x-pagination-total'
+
+accuracy:
+  prefixUrl: https://www.thisisbac.com
+
+jimp:
+  x-logo-opt-1: 5
+  y-logo-opt-1: 5
+  x-text-opt-1: 50
+  y-text-opt-1: 50

@@ -7,7 +7,6 @@ import {
   ValidationPipe,
   UseInterceptors,
   UploadedFile,
-  ClassSerializerInterceptor,
   Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
