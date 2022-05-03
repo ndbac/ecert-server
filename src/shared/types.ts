@@ -10,7 +10,7 @@ export enum CollectionName {
 
 export enum IamNamespace {
   ADMIN = 'admin',
-  WRITER = 'writer',
+  PROJECT = 'project',
   USER = 'user',
   GUEST = 'guest',
 }

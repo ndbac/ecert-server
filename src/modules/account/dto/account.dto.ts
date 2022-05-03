@@ -25,12 +25,7 @@ export class SoftUpdateAccountDto {
   @ApiPropertyOptional({ type: String })
   @IsOptional()
   @IsString()
-  firstName?: string;
-
-  @ApiPropertyOptional({ type: String })
-  @IsOptional()
-  @IsString()
-  lastName?: string;
+  name?: string;
 
   @ApiPropertyOptional({ type: String })
   @IsOptional()

@@ -59,7 +59,7 @@ export class AccuracyController {
     description: 'data accuracy automatically',
     type: AccuracyResDto,
   })
-  @ApiBody({ type: AccuracyInputDto })
+  // @ApiBody({ type: AccuracyInputDto })
   @UseInterceptors(
     FileInterceptor('image', {
       fileFilter: imageFileFilter,
@@ -70,12 +70,12 @@ export class AccuracyController {
   @Post('/automatically/generate')
   async dataAccuracyAutomatically(
     @User('') userData: TokenDetailsDto,
-    @Body() input: AccuracyInputDto,
+    // @Body() input: AccuracyInputDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
     return await this.accuracySrv.dataAccuracyAutomatically(
       userData,
-      input,
+      // input,
       file,
     );
   }

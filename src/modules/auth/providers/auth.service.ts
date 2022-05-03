@@ -12,6 +12,7 @@ import {
 import { HashingService } from '../../common/hashing/hashing.service';
 import { JwtService } from '../../common/jwt/jwt.service';
 import { TokenDetailsDto } from 'src/shared/user.dto';
+import { IamNamespace } from 'src/shared/types';
 
 @Injectable()
 export class AuthService {
@@ -22,20 +23,26 @@ export class AuthService {
   ) {}
 
   async register(data: CreateAccountDto) {
+    if (data.namespace === IamNamespace.ADMIN) {
+      throw new ForbiddenException(
+        'You are not allowed to register an admin account',
+      );
+    }
     const account = {
       ...data,
       password: await this.hashingSrv.hash(data.password),
       active: data.active || true,
       photoUrl: data.photoUrl || process.env.DEFAULT_PROFILE_PHOTO,
       bio: data?.bio || null,
+      namespace: data.namespace,
     };
     const createdAccount = await this.authRepo.create(account);
     return {
       userId: createdAccount._id,
       email: createdAccount.email,
       bio: createdAccount.bio,
-      firstName: createdAccount.firstName,
-      lastName: createdAccount.lastName,
+      name: createdAccount.name,
+      namespace: createdAccount.namespace,
       createdAt: createdAccount.createdAt,
       photoUrl: createdAccount.photoUrl,
     };

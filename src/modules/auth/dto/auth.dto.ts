@@ -11,7 +11,10 @@ import {
   MinLength,
   MaxLength,
   Matches,
+  IsEnum,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IamNamespace } from 'src/shared/types';
 
 export class AccountLoginDto {
   @ApiProperty({ type: String })
@@ -31,6 +34,11 @@ export class CreateAccountDto {
   @IsEmail()
   email: string;
 
+  @ApiProperty({ enum: IamNamespace })
+  @IsNotEmpty()
+  @IsEnum(IamNamespace)
+  namespace: IamNamespace;
+
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
@@ -45,12 +53,7 @@ export class CreateAccountDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
-  firstName: string;
-
-  @ApiProperty({ type: String })
-  @IsNotEmpty()
-  @IsString()
-  lastName: string;
+  name: string;
 
   @ApiPropertyOptional({ type: Boolean })
   @IsOptional()

@@ -32,12 +32,7 @@ export class AccountResponseDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
-  firstName: string;
-
-  @ApiProperty({ type: String })
-  @IsNotEmpty()
-  @IsString()
-  lastName: string;
+  name: string;
 
   @ApiProperty({ type: Date })
   @IsNotEmpty()

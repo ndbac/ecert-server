@@ -11,13 +11,10 @@ export class AuthDocument extends BaseDocument {
   email: string;
 
   @Prop({ required: true })
-  firstName: string;
-
-  @Prop({ required: true })
-  lastName: string;
-
-  @Prop({ required: true })
   password: string;
+
+  @Prop({ required: true })
+  name: string;
 
   @Prop({ default: null, nullable: true })
   bio: string;
@@ -34,6 +31,6 @@ export class AuthDocument extends BaseDocument {
   @Prop({ default: new Date(), required: true })
   passwordChanged: Date;
 
-  @Prop({ default: IamNamespace.USER, required: true })
+  @Prop({ required: true })
   namespace: IamNamespace;
 }

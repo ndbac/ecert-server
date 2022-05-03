@@ -39,7 +39,7 @@ export class AccuracyService {
 
   async dataAccuracyAutomatically(
     tokenDetails: TokenDetailsDto,
-    input: AccuracyInputDto,
+    // input: AccuracyInputDto,
     file: Express.Multer.File,
   ) {
     const photoPath = await saveImgToTempDir(
