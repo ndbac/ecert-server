@@ -15,7 +15,7 @@ import {
 import { NotificationService } from '../providers/notification.service';
 import { SendEmailInputDto } from '../dto/notification.dto';
 
-@Controller('notification/:userId')
+@Controller('notification')
 @ApiTags('notification')
 export class NotificationController {
   constructor(private readonly notiService: NotificationService) {}
@@ -32,11 +32,25 @@ export class NotificationController {
   @ApiParam({
     name: 'userId',
   })
-  @Post('')
+  @Post(':userId')
   async sendNotification(
     @Body() input: SendEmailInputDto,
     @Param('userId') userId: string,
   ) {
-    return await this.notiService.sendEmail(input, userId);
+    return await this.notiService.sendNotification(input, userId);
+  }
+
+  @ApiOperation({
+    operationId: 'sendEmail',
+    summary: 'send email',
+  })
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiResponse({
+    status: HttpStatus.ACCEPTED,
+    description: 'email sent',
+  })
+  @Post('')
+  async sendMail(@Body() input: SendEmailInputDto) {
+    return await this.notiService.sendMail(input);
   }
 }

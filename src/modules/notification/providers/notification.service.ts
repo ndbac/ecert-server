@@ -7,7 +7,7 @@ import { sendEmailMachine } from '../../util/nodeMailer/nodeMailer';
 export class NotificationService {
   constructor(private readonly notiRepo: NotificationRepository) {}
 
-  async sendEmail(input: SendEmailInputDto, userId: string) {
+  async sendNotification(input: SendEmailInputDto, userId: string) {
     await sendEmailMachine(input);
     return await this.notiRepo.create({
       userId,
@@ -20,5 +20,12 @@ export class NotificationService {
         type: input.type,
       },
     });
+  }
+
+  async sendMail(input: SendEmailInputDto) {
+    await sendEmailMachine(input);
+    return {
+      status: 'email sent successfully',
+    };
   }
 }

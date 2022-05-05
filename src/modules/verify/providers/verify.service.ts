@@ -48,7 +48,7 @@ export class VerifyService {
       option: EEmailOption.TEXT,
       type: ENotificationType.VERIFICATION_ACCOUNT,
     };
-    await this.notiService.sendEmail(emailData, account._id);
+    await this.notiService.sendNotification(emailData, account._id);
     const isExist = await this.verifyRepo.findOne({ userId: account._id });
     if (isExist) {
       await this.verifyRepo.updateById(isExist._id, verifyToken);
@@ -83,7 +83,7 @@ export class VerifyService {
       option: EEmailOption.TEXT,
       type: ENotificationType.RESET_PASSWORD,
     };
-    await this.notiService.sendEmail(emailData, account._id);
+    await this.notiService.sendNotification(emailData, account._id);
 
     const isExist = await this.verifyRepo.findOne({ userId: account._id });
     if (isExist) {
