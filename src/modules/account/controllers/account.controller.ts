@@ -8,11 +8,14 @@ import {
   UseInterceptors,
   UploadedFile,
   Body,
+  Get,
+  Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiTags,
   ApiBody,
+  ApiParam,
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger/dist/decorators';
@@ -25,6 +28,7 @@ import {
   UploadPhotoResponseDto,
   SoftUpdateAccountDto,
 } from '../dto/account.dto';
+// import { UserResBodyInterceptor } from 'src/interceptors/user/user-res-body.interceptor';
 
 @Controller('account')
 @ApiTags('user.account')
@@ -74,5 +78,21 @@ export class AccountController {
     @Body('') input: SoftUpdateAccountDto,
   ) {
     return await this.accountSrv.profileSoftUpdate(userData, input);
+  }
+
+  @ApiOperation({
+    operationId: 'getAccountDetails',
+    summary: 'get user details',
+  })
+  // @UseInterceptors(UserResBodyInterceptor)
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'user details',
+  })
+  @ApiParam({ name: 'userId' })
+  @Get('/:userId')
+  async getAccountDetails(@Param('userId') userId: string) {
+    return await this.accountSrv.getAccountDetails(userId);
   }
 }

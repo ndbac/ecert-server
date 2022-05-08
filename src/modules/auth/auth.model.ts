@@ -2,6 +2,7 @@ import { Prop, Schema } from '@nestjs/mongoose';
 import { BaseDocument } from 'src/shared/mongoose/base.document';
 import { IamNamespace } from 'src/shared/types';
 import { DefaultSchemaOptions } from 'src/shared/mongoose/schema-option';
+import { Exclude } from 'class-transformer';
 
 const defaultPhotoUrl = process.env.DEFAULT_PROFILE_PHOTO;
 
@@ -10,6 +11,7 @@ export class AuthDocument extends BaseDocument {
   @Prop({ required: true, unique: true })
   email: string;
 
+  @Exclude()
   @Prop({ required: true })
   password: string;
 
@@ -28,6 +30,7 @@ export class AuthDocument extends BaseDocument {
   @Prop({ default: defaultPhotoUrl, required: true })
   photoUrl: string;
 
+  @Exclude()
   @Prop({ default: new Date(), required: true })
   passwordChanged: Date;
 

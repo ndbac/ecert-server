@@ -43,4 +43,8 @@ export class AccountService {
     );
     return { ...data, userId: account._id };
   }
+
+  async getAccountDetails(userId: string) {
+    return await this.authRepo.findByIdOrFail(userId);
+  }
 }
