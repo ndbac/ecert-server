@@ -45,6 +45,15 @@ export class AccountService {
   }
 
   async getAccountDetails(userId: string) {
-    return await this.authRepo.findByIdOrFail(userId);
+    const account = await this.authRepo.findByIdOrFail(userId);
+    return {
+      email: account.email,
+      name: account.name,
+      bio: account.bio,
+      active: account.active,
+      verify: account.verify,
+      photoUrl: account.photoUrl,
+      namespace: account.namespace,
+    };
   }
 }
