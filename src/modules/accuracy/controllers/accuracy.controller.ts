@@ -8,6 +8,7 @@ import {
   ValidationPipe,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -22,9 +23,13 @@ import { User } from 'src/decorators/user.decorator';
 import { TokenDetailsDto } from 'src/shared/user.dto';
 import { AccuracyInputDto, AccuracyResDto } from '../dto/accuracy.dto';
 import { imageFileFilter } from 'src/shared/media/uploadMedia.helpers';
+import { AuthEndpoint } from 'src/decorators/auth-endpoint.decorator';
+import { IamNamespace } from 'src/shared/types';
+import { ProjectorAccessGuard } from 'src/guards/resources/projector-access.guard';
 
 @Controller('accuracy')
 @ApiTags('accuracy')
+@UseGuards(ProjectorAccessGuard)
 @UsePipes(ValidationPipe)
 export class AccuracyController {
   constructor(private readonly accuracySrv: AccuracyService) {}
@@ -33,6 +38,7 @@ export class AccuracyController {
     operationId: 'dataAccuracyManually',
     summary: 'generate qrcode & signature',
   })
+  @AuthEndpoint({ namespaces: [IamNamespace.ADMIN, IamNamespace.PROJECT] })
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
@@ -53,6 +59,7 @@ export class AccuracyController {
     operationId: 'dataAccuracyAutomatically',
     summary: 'generate qrcode, signature to add to photo automatically',
   })
+  @AuthEndpoint({ namespaces: [IamNamespace.ADMIN, IamNamespace.PROJECT] })
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,

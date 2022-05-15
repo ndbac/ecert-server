@@ -9,6 +9,7 @@ import {
   HttpStatus,
   UsePipes,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -23,9 +24,13 @@ import { TokenDetailsDto } from 'src/shared/user.dto';
 import { CreateCategoryDto, UpdateCategoryBodyDto } from '../dto/category.dto';
 import { CategoryResponseDto } from '../dto/category-response.dto';
 import { CategoryService } from '../providers/category.service';
+import { AuthEndpoint } from 'src/decorators/auth-endpoint.decorator';
+import { IamNamespace } from 'src/shared/types';
+import { ProjectorAccessGuard } from 'src/guards/resources/projector-access.guard';
 
 @Controller('creator/category')
 @ApiTags('creator.category')
+@UseGuards(ProjectorAccessGuard)
 @UsePipes(ValidationPipe)
 export class CategoryController {
   constructor(private readonly categorySvc: CategoryService) {}
@@ -34,6 +39,7 @@ export class CategoryController {
     operationId: 'createCategory',
     summary: 'creator create a category',
   })
+  @AuthEndpoint({ namespaces: [IamNamespace.ADMIN, IamNamespace.PROJECT] })
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -54,6 +60,7 @@ export class CategoryController {
     operationId: 'updateCategory',
     summary: 'creator update a category',
   })
+  @AuthEndpoint({ namespaces: [IamNamespace.ADMIN, IamNamespace.PROJECT] })
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -79,6 +86,7 @@ export class CategoryController {
     operationId: 'deleteCategory',
     summary: 'creator delete a category',
   })
+  @AuthEndpoint({ namespaces: [IamNamespace.ADMIN, IamNamespace.PROJECT] })
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: HttpStatus.CREATED,
