@@ -2,6 +2,7 @@ import {
   Controller,
   Put,
   Body,
+  Param,
   HttpCode,
   HttpStatus,
   UsePipes,
@@ -12,6 +13,7 @@ import {
   ApiBody,
   ApiOperation,
   ApiResponse,
+  ApiParam,
 } from '@nestjs/swagger/dist/decorators';
 import { VerifyService } from '../providers/verify.service';
 import { PasswordResetInputDto } from '../dto/verify.dto';
@@ -38,6 +40,25 @@ export class VerifyController {
   @Put('/createVerifyAccountToken')
   async createVerifyAccountToken(@User('') userData: TokenDetailsDto) {
     return await this.verifyService.createVerifycationToken(userData);
+  }
+
+  @ApiOperation({
+    operationId: 'verifyAccount',
+    summary: 'user verify account',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Account verified',
+  })
+  @ApiParam({ name: 'verifyToken' })
+  @SecurityDecorator()
+  @Put('/:verifyToken')
+  async verifyAccount(
+    @User('') userData: TokenDetailsDto,
+    @Param('verifyToken') verifyToken: string,
+  ) {
+    return await this.verifyService.verifyAccount(userData, verifyToken);
   }
 
   @ApiOperation({

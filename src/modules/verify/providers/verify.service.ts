@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { VerifyRepository } from '../verify.repository';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { PasswordResetInputDto } from '../dto/verify.dto';
@@ -63,6 +67,31 @@ export class VerifyService {
       recipient: account.email,
       userId: account._id,
     };
+  }
+
+  async verifyAccount(data: TokenDetailsDto, verifyToken: string) {
+    const account = await this.authRepo.findOneOrFail({
+      _id: data.user.userId,
+    });
+    if (account.verify) {
+      throw new BadRequestException(
+        `user id: ${account._id} has already verified`,
+      );
+    }
+    const verify = await this.verifyRepo.findOne({ userId: account._id });
+    const savedToken = await this.cryptoService.decryptText(
+      verify.verificationToken,
+    );
+
+    if (verifyToken === savedToken) {
+      await this.authRepo.updateById(account._id, { verify: true });
+      return {
+        mesage: 'account verified!',
+      };
+    }
+    throw new ForbiddenException(
+      'Your account is not belonging to this verification token',
+    );
   }
 
   async createResetPasswordToken(input: PasswordResetInputDto) {
