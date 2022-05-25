@@ -1,4 +1,9 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
 import { CommonModule } from '../common/common.module';
 import { VerifyCoreModule } from './verify.core.module';
 import { VerifyService } from './providers/verify.service';
@@ -20,6 +25,12 @@ import { UserMiddleware } from 'src/middlewares/user.middleware';
 })
 export class VerifyModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UserMiddleware).forRoutes(VerifyController);
+    consumer
+      .apply(UserMiddleware)
+      .exclude({
+        path: 'verify/createResetPasswordToken',
+        method: RequestMethod.PUT,
+      })
+      .forRoutes(VerifyController);
   }
 }

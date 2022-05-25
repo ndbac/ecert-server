@@ -28,6 +28,21 @@ export class VerifyController {
   constructor(private readonly verifyService: VerifyService) {}
 
   @ApiOperation({
+    operationId: 'createResetPasswordToken',
+    summary: 'create reset password token',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Reset password token created',
+  })
+  @ApiBody({ type: PasswordResetInputDto })
+  @Put('/createResetPasswordToken')
+  async createResetPasswordToken(@Body() data: PasswordResetInputDto) {
+    return await this.verifyService.createResetPasswordToken(data);
+  }
+
+  @ApiOperation({
     operationId: 'createVerifyAccountToken',
     summary: 'create verify account token',
   })
@@ -59,20 +74,5 @@ export class VerifyController {
     @Param('verifyToken') verifyToken: string,
   ) {
     return await this.verifyService.verifyAccount(userData, verifyToken);
-  }
-
-  @ApiOperation({
-    operationId: 'createResetPasswordToken',
-    summary: 'create reset password token',
-  })
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Reset password token created',
-  })
-  @ApiBody({ type: PasswordResetInputDto })
-  @Put('/createResetPasswordToken')
-  async createResetPasswordToken(@Body() data: PasswordResetInputDto) {
-    return await this.verifyService.createResetPasswordToken(data);
   }
 }
