@@ -18,3 +18,10 @@ export class PasswordResetInputDto {
   @IsString()
   email: string;
 }
+
+export class PasswordResetDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  newPassword: string;
+}

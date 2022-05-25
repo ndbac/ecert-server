@@ -8,6 +8,10 @@ export class CryptoService {
     return crypto.randomBytes(length).toString('hex');
   }
 
+  async hashingText(rawText: string) {
+    return crypto.createHash('sha256').update(rawText).digest('hex');
+  }
+
   async encryptText(rawText: string) {
     return CryptoJS.AES.encrypt(rawText, process.env.CRYPTO_KEY).toString();
   }

@@ -16,7 +16,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger/dist/decorators';
 import { VerifyService } from '../providers/verify.service';
-import { PasswordResetInputDto } from '../dto/verify.dto';
+import { PasswordResetInputDto, PasswordResetDto } from '../dto/verify.dto';
 import { SecurityDecorator } from 'src/decorators/security-input.decorator';
 import { User } from 'src/decorators/user.decorator';
 import { TokenDetailsDto } from 'src/shared/user.dto';
@@ -40,6 +40,28 @@ export class VerifyController {
   @Put('/createResetPasswordToken')
   async createResetPasswordToken(@Body() data: PasswordResetInputDto) {
     return await this.verifyService.createResetPasswordToken(data);
+  }
+
+  @ApiOperation({
+    operationId: 'resetPassword',
+    summary: 'reset password with token',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Password reseted',
+  })
+  @ApiParam({ name: 'resetToken' })
+  @ApiBody({ type: PasswordResetDto })
+  @Put('/reset-password/:resetToken')
+  async resetPassword(
+    @Param('resetToken') resetToken: string,
+    @Body() data: PasswordResetDto,
+  ) {
+    return await this.verifyService.resetPasswordWithToken(
+      resetToken,
+      data.newPassword,
+    );
   }
 
   @ApiOperation({

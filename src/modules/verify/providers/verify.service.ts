@@ -17,6 +17,7 @@ import {
 import { EEmailOption } from '../../util/types';
 import { ENotificationType } from '../../notification/types';
 import { TokenDetailsDto } from 'src/shared/user.dto';
+import { HashingService } from '../../common/hashing/hashing.service';
 
 @Injectable()
 export class VerifyService {
@@ -25,6 +26,7 @@ export class VerifyService {
     private readonly cryptoService: CryptoService,
     private readonly authRepo: AuthRepository,
     private readonly notiService: NotificationService,
+    private readonly hashingSrv: HashingService,
   ) {}
 
   async createVerifycationToken(input: TokenDetailsDto) {
@@ -97,7 +99,7 @@ export class VerifyService {
   async createResetPasswordToken(input: PasswordResetInputDto) {
     const account = await this.authRepo.findOneOrFail({ email: input.email });
     const rawToken = await this.cryptoService.generateRandomBytes(32);
-    const encryptedToken = await this.cryptoService.encryptText(rawToken);
+    const encryptedToken = await this.cryptoService.hashingText(rawToken);
     const passwordResetToken = {
       passwordResetToken: encryptedToken,
       passwordResetExpires: new Date(
@@ -130,5 +132,26 @@ export class VerifyService {
       status: 'email sent successfully',
       email: input.email,
     };
+  }
+
+  async resetPasswordWithToken(token: string, password: string) {
+    const encryptedToken = await this.cryptoService.hashingText(token);
+    const verifyAcc = await this.verifyRepo.findOneOrFail({
+      passwordResetToken: encryptedToken,
+    });
+    if (verifyAcc.passwordResetExpires < new Date()) {
+      throw new ForbiddenException('invalid reset password token');
+    }
+    const hashedNewPassword = await this.hashingSrv.hash(password);
+    await this.authRepo.updateById(verifyAcc.userId, {
+      password: hashedNewPassword,
+    });
+    await this.verifyRepo.updateById(verifyAcc._id, {
+      passwordResetToken: undefined,
+      passwordResetExpires: undefined,
+    });
+    return {
+      status: 'password updated successfully',
+    }
   }
 }
