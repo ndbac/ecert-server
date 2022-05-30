@@ -34,7 +34,23 @@ export class UserAccuracyController {
   })
   @ApiParam({ name: 'signature' })
   @Get(':signature')
-  async dataAccuracyManually(@Param('signature') signature: string) {
+  async getCertBySignature(@Param('signature') signature: string) {
     return await this.userAccuracySrv.getCertBySign(signature);
+  }
+
+  @ApiOperation({
+    operationId: 'getCertificationByUserId',
+    summary: 'get certification by userId',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'certification data',
+    type: AccuracyResDto,
+  })
+  @ApiParam({ name: 'userId' })
+  @Get('/user/:userId')
+  async getCertsByUserId(@Param('userId') signature: string) {
+    return await this.userAccuracySrv.getCertByUserId(signature);
   }
 }
