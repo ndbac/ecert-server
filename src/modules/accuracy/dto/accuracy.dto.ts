@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger/dist/decorators';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail } from 'class-validator';
 import { BaseResponseDto } from 'src/shared/base.dto';
 
 export class AccuracyInputDto {
@@ -7,6 +7,21 @@ export class AccuracyInputDto {
   @IsNotEmpty()
   @IsString()
   data: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  subject: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
 }
 
 export class AccuracyResDto extends BaseResponseDto {

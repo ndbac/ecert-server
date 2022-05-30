@@ -31,6 +31,9 @@ export class AccuracyService {
     );
     return await this.accuracyRepo.create({
       data: input.data,
+      subject: input.subject,
+      name: input.name,
+      email: input.email,
       qrCode: qrLink,
       userId: tokenDetails.user.userId,
       signature,
@@ -69,6 +72,9 @@ export class AccuracyService {
     );
     return await this.accuracyRepo.create({
       data: input.data,
+      subject: input.subject,
+      name: input.name,
+      email: input.email,
       qrCode: savedQrPhotoPath,
       userId: tokenDetails.user.userId,
       signature,
