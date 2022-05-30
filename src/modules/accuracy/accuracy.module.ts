@@ -8,11 +8,19 @@ import { UserMiddleware } from 'src/middlewares/user.middleware';
 import { QRCodeService } from 'src/modules/common/qrcode/qrcode.provider';
 import { CryptoService } from 'src/modules/common/crypto/crypto.service';
 import { JimpService } from 'src/modules/common/jimp/jimp.provider';
+import { UserAccuracyController } from './controllers/user-accuracy.controller';
+import { UserAccuracyService } from './providers/user-accuracy.service';
 
 @Module({
   imports: [AccuracyCoreModule, CommonModule, AuthCoreModule],
-  providers: [AccuracyService, QRCodeService, CryptoService, JimpService],
-  controllers: [AccuracyController],
+  providers: [
+    AccuracyService,
+    QRCodeService,
+    CryptoService,
+    JimpService,
+    UserAccuracyService,
+  ],
+  controllers: [AccuracyController, UserAccuracyController],
 })
 export class AccuracyModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

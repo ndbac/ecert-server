@@ -33,6 +33,21 @@ export class AccuracyResDto extends BaseResponseDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsString()
+  subject: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
   qrCode: string;
 
   @ApiProperty({ type: String })
