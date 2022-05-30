@@ -67,6 +67,11 @@ export class AccuracyService {
       fileName,
       IamPhotoType.JPG,
     );
-    return savedQrPhotoPath;
+    return await this.accuracyRepo.create({
+      data: input.data,
+      qrCode: savedQrPhotoPath,
+      userId: tokenDetails.user.userId,
+      signature,
+    });
   }
 }
