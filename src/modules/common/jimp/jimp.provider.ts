@@ -49,12 +49,11 @@ export class JimpService {
       });
       const savePath = `temp/${IMediaLocalPath.QR_ADDED_PHOTO}/${name}.${extension}`;
       await image.writeAsync(savePath);
-      // const photo = await cloudinaryUploadImg(savePath);
-      // fs.unlinkSync(savePath);
+      const photo = await cloudinaryUploadImg(savePath);
+      fs.unlinkSync(savePath);
       fs.unlinkSync(imagePath);
       fs.unlinkSync(watermarkPath);
-      // return photo.url;
-      return 'successed';
+      return photo.url;
     } catch (error) {
       throw new Error(error);
     }
