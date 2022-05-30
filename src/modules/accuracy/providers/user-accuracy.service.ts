@@ -6,6 +6,6 @@ export class UserAccuracyService {
   constructor(private readonly accuracyRepo: AccuracyRepository) {}
 
   async getCertBySign(signature: string) {
-    return await this.accuracyRepo.findOne({ signature });
+    return await this.accuracyRepo.findOneOrFail({ signature });
   }
 }
