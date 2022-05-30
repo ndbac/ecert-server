@@ -1,6 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AccuracyRepository } from '../accuracy.repository';
-import _ from 'lodash';
 
 @Injectable()
 export class UserAccuracyService {
@@ -12,9 +11,6 @@ export class UserAccuracyService {
 
   async getCertByUserId(userId: string) {
     const certs = await this.accuracyRepo.find({ userId });
-    if (_.isEmpty(certs)) {
-      throw new NotFoundException('Not found');
-    }
     return certs;
   }
 }
