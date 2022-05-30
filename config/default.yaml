@@ -12,7 +12,7 @@ server:
     exposedHeaders: 'authorization,x-response-time,x-request-id, x-pagination-page, x-pagination-page-size, x-pagination-total'
 
 accuracy:
-  prefixUrl: https://www.thisisbac.com
+  prefixUrl: http://localhost:3000
 
 jimp:
   x-logo-opt-1: 5

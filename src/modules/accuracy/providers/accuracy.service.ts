@@ -55,7 +55,7 @@ export class AccuracyService {
     const prefixUrl = config.get<string>('accuracy.prefixUrl');
     const qrPath = await this.qrcodeService.generateQr(
       fileName,
-      `${prefixUrl}/${tokenDetails.user.userId}/${signature}`,
+      `${prefixUrl}/certification/${signature}`,
     );
     await this.jimpSrv.resizePhoto(photoPath, 1800);
     const savedTextPhotoPath = await this.jimpSrv.addText(
