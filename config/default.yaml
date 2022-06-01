@@ -12,7 +12,7 @@ server:
     exposedHeaders: 'authorization,x-response-time,x-request-id, x-pagination-page, x-pagination-page-size, x-pagination-total'
 
 accuracy:
-  prefixUrl: https://ecert-v1.vercel.app
+  prefixUrl: https://www.ecert.site/
 
 jimp:
   x-logo-opt-1: 5
