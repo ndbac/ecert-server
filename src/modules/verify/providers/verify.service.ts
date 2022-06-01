@@ -50,7 +50,7 @@ export class VerifyService {
       from: process.env.EMAIL_SENDER_DEFAULT,
       to: account.email,
       subject: AccountVerificationSubject,
-      text: `${AccountVerificationText}: ${rawToken}`,
+      text: `Click here to verify your eCert account: https://www.ecert.site/verify-account/${rawToken}`,
       option: EEmailOption.TEXT,
       type: ENotificationType.VERIFICATION_ACCOUNT,
     };
@@ -110,7 +110,7 @@ export class VerifyService {
       from: process.env.EMAIL_SENDER_DEFAULT,
       to: input.email,
       subject: ResetPasswordSubject,
-      text: `${ResetPasswordText}: ${rawToken}`,
+      text: `Click here to verify your eCert account: https://www.ecert.site/reset-password/${rawToken}`,
       option: EEmailOption.TEXT,
       type: ENotificationType.RESET_PASSWORD,
     };
@@ -152,6 +152,6 @@ export class VerifyService {
     });
     return {
       status: 'password updated successfully',
-    }
+    };
   }
 }
