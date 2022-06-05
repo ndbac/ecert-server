@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import * as config from 'config';
 import { AccuracyRepository } from '../accuracy.repository';
 import { QRCodeService } from 'src/modules/common/qrcode/qrcode.provider';
 import { TokenDetailsDto } from 'src/shared/user.dto';
-import { AccuracyInputDto } from '../dto/accuracy.dto';
+import {
+  AccuracyInputDto,
+  sendCertificationInputDto,
+} from '../dto/accuracy.dto';
 import { CryptoService } from 'src/modules/common/crypto/crypto.service';
 import { JimpService } from 'src/modules/common/jimp/jimp.provider';
 import { IamPhotoType, IMediaLocalPath } from 'src/shared/types';
 import { saveImgToTempDir } from 'src/shared/media/uploadMedia.helpers';
+import { sendEmailMachine } from '../../util/nodeMailer/nodeMailer';
+import { EEmailOption } from '../../util/types';
 
 @Injectable()
 export class AccuracyService {
@@ -79,5 +84,29 @@ export class AccuracyService {
       userId: tokenDetails.user.userId,
       signature,
     });
+  }
+
+  async sendCertification(
+    tokenDetails: TokenDetailsDto,
+    input: sendCertificationInputDto,
+  ) {
+    const certi = await this.accuracyRepo.findOneOrFail({
+      signature: input.signature,
+    });
+    if (certi.userId !== tokenDetails.user.userId) {
+      throw new ForbiddenException('You cannot access this route');
+    }
+    const text = `Signature: ${certi.signature}, Check in our website: https://www.ecert.site/certification/${certi.signature}`;
+    const data = {
+      from: process.env.EMAIL_USERNAME,
+      to: input.email,
+      subject: 'eCert - New Certification Sending To You',
+      text,
+      option: EEmailOption.TEXT,
+    };
+    await sendEmailMachine(data);
+    return {
+      msg: 'email sent',
+    };
   }
 }

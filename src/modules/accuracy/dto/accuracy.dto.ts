@@ -2,6 +2,18 @@ import { ApiProperty } from '@nestjs/swagger/dist/decorators';
 import { IsNotEmpty, IsString, IsEmail } from 'class-validator';
 import { BaseResponseDto } from 'src/shared/base.dto';
 
+export class sendCertificationInputDto {
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  @IsString()
+  signature: string;
+}
+
 export class AccuracyInputDto {
   @ApiProperty({ type: String })
   @IsNotEmpty()

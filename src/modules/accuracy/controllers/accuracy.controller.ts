@@ -21,7 +21,11 @@ import { AccuracyService } from '../providers/accuracy.service';
 import { SecurityDecorator } from 'src/decorators/security-input.decorator';
 import { User } from 'src/decorators/user.decorator';
 import { TokenDetailsDto } from 'src/shared/user.dto';
-import { AccuracyInputDto, AccuracyResDto } from '../dto/accuracy.dto';
+import {
+  AccuracyInputDto,
+  AccuracyResDto,
+  sendCertificationInputDto,
+} from '../dto/accuracy.dto';
 import { imageFileFilter } from 'src/shared/media/uploadMedia.helpers';
 import { AuthEndpoint } from 'src/decorators/auth-endpoint.decorator';
 import { IamNamespace } from 'src/shared/types';
@@ -85,5 +89,25 @@ export class AccuracyController {
       input,
       file,
     );
+  }
+
+  @ApiOperation({
+    operationId: 'sendCertification',
+    summary: 'send certi to a specific email',
+  })
+  @AuthEndpoint({ namespaces: [IamNamespace.ADMIN, IamNamespace.PROJECT] })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'email sent',
+  })
+  @ApiBody({ type: sendCertificationInputDto })
+  @SecurityDecorator()
+  @Post('/send-certification')
+  async sendCertificationToEmail(
+    @User('') userData: TokenDetailsDto,
+    @Body() input: sendCertificationInputDto,
+  ) {
+    return await this.accuracySrv.sendCertification(userData, input);
   }
 }
